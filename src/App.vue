@@ -2,6 +2,9 @@
   <div id="app">
     <!-- 根路由出口 -->
     <router-view></router-view>
+    <div>测试样式设置</div>
+
+    <van-icon name="like-o" />
     <van-button type="default">默认按钮</van-button>
     <van-button type="primary">主要按钮</van-button>
     <van-button type="info">信息按钮</van-button>
@@ -11,6 +14,7 @@
 </template>
 
 <script>
+import '@/styles/base.less'
 export default {
   name: 'App'
 }
