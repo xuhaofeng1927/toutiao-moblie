@@ -1,24 +1,16 @@
 <template>
   <div id="app">
-      <Foo></Foo>
-      <Bar></Bar>
+    <!-- 根路由出口 -->
+    <router-view></router-view>
   </div>
 </template>
+
 <script>
-import Foo from './components/Foo'
-import Bar from './components/Bar'
 export default {
-  name: 'App',
-  components: {
-    Foo,
-    Bar
-  }
+  name: 'App'
 }
 </script>
-<style lang="less">
-.com {
-    border: 1px solid #000;
-    padding: 10px;
-    margin-bottom: 20px;
-  }
+
+<style>
+
 </style>
