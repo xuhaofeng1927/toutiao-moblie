@@ -6,8 +6,8 @@
     <div class="login-field">
       <van-field placeholder="请输入用户名"  left-icon="user-o">
       </van-field>
-      <van-field placeholder="请输入验证码" left-icon="eye-o">
-         <van-icon class-prefix="icont" name="mima" />
+      <van-field placeholder="请输入验证码">
+         <van-icon slot="left-icon" class-prefix="icont" name="mima" />
       </van-field>
 
     </div>
