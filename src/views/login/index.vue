@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import request from '@/utils/request-axios'
+import { getUsersLogin } from '@/api/user'
 export default {
   name: 'login',
   data () {
@@ -40,13 +40,9 @@ export default {
       console.log(user)
       try {
         // 2，请求参数
-        let result = await request({
-          url: '/app/v1_0/authorizations',
-          method: 'post', // 请求方式
-          data: user
-        })
+        let result = await getUsersLogin(user)
         // 3，返回数据
-        console.log(result)
+        console.log('成功', result)
         this.$toast.success('登录成功')
       } catch (error) {
         console.log('失败', error)
