@@ -4,25 +4,40 @@
     <van-nav-bar title="登录" />
     <!--引入输入框-->
     <div class="login-field">
-      <van-field placeholder="请输入用户名/手机号/邮箱" left-icon="user-o" v-model="user.mobile"></van-field>
-      <van-field placeholder="请输入验证码" v-model="user.code">
-        <van-icon slot="left-icon" class-prefix="icont" name="mima" />
-        <van-button
-          v-if="isCountDownShow"
-          v-model="verityvalue"
-          slot="button"
-          size="small"
-          type="primary"
-          @click="getverity"
-        >{{verityvalue}}</van-button>
-        <van-count-down
-          v-else
-          slot="button"
-          :time="60 * 1000"
-          @finish="backverify"
-          format="ss 秒后重新获取"
-        />
-      </van-field>
+       <!--
+      表单验证
+      1、使用 ValidationObserver 组件把需要验证的整个表单包起来
+      2、使用 ValidationProvider 组件把具体的表单元素包起来，例如 input
+         name   配置字段的提示名称
+         rules  配置校验规则
+         v-slot="{ errors }" 获取校验失败的错误提示消息
+     -->
+      <ValidationObserver>
+        <ValidationProvider name="手机号" rules="required" v-slot="{ errors }">
+          <van-field placeholder="请输入用户名/手机号/邮箱" left-icon="user-o" v-model="user.mobile"></van-field>
+          <span>{{ errors[0] }}</span>
+        </ValidationProvider>
+        <ValidationProvider>
+          <van-field placeholder="请输入验证码" v-model="user.code">
+            <van-icon slot="left-icon" class-prefix="icont" name="mima" />
+            <van-button
+              v-if="isCountDownShow"
+              v-model="verityvalue"
+              slot="button"
+              size="small"
+              type="primary"
+              @click="getverity"
+            >{{verityvalue}}</van-button>
+            <van-count-down
+              v-else
+              slot="button"
+              :time="60 * 1000"
+              @finish="backverify"
+              format="ss 秒后重新获取"
+            />
+          </van-field>
+        </ValidationProvider>
+      </ValidationObserver>
     </div>
     <div class="loginBtn">
       <van-button type="info" @click="onLogin">登录</van-button>
