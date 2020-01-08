@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import '@/styles/base.less'
 export default {
   name: 'App'
 }
