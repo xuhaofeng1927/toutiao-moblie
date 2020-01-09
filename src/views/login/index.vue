@@ -13,10 +13,10 @@
          v-slot="{ errors }" 获取校验失败的错误提示消息
       -->
       <ValidationObserver ref="myform">
-        <ValidationProvider name="手机号" rules="required|mobile">
+        <ValidationProvider name="手机号" rules="required|mobile" immediate v-slot="{ errors }">
           <van-field placeholder="请输入用户名/手机号/邮箱" left-icon="user-o" v-model="user.mobile"></van-field>
         </ValidationProvider>
-        <ValidationProvider name="验证码" rules="required|code">
+        <ValidationProvider name="验证码" rules="required|code" immediate v-slot="{ errors }">
           <van-field placeholder="请输入验证码" v-model="user.code">
             <van-icon slot="left-icon" class-prefix="icont" name="mima" />
             <van-button
@@ -30,7 +30,7 @@
             <van-count-down
               v-else
               slot="button"
-              :time="60 * 1000"
+              :time="6 * 1000"
               @finish="backverify"
               format="ss 秒后重新获取"
             />
@@ -46,12 +46,13 @@
 
 <script>
 import { getUsersLogin, getverity } from '@/api/user'
+import { validate } from 'vee-validate' // 引入自定义校验规则
 export default {
   name: 'login',
   data () {
     return {
       user: {
-        mobile: '13911111111',
+        mobile: '',
         code: ''
       },
       isCountDownShow: true,
@@ -99,27 +100,38 @@ export default {
     },
     // 获取验证码
     async getverity () {
-      // 验证手机号是否为空
-      if (this.user.mobile) {
-        // 获取手机号
-        const { mobile } = this.user
-        // 验证手机号是否存在
-        // 隐藏标签
-        this.isCountDownShow = false
+      // 获取手机号
+      const { mobile } = this.user
+      // 验证手机号是否存在
 
-        // 请求数据
-        try {
-          let result = await getverity(mobile)
-          console.log('成功', result)
-        } catch (error) {
-          if (error.response.status === 429) {
-            this.$toast('请勿频繁发送')
-          } else {
-            this.$toast.fail('发送失败')
-          }
+      const validateResult = await validate(mobile, 'required|mobile', {
+        name: '手机号'
+      })
+      // 参数1：要验证的数据
+      // 参数2：验证规则
+      // 参数3：一个可选的配置对象，例如配置错误消息字段名称 name
+      // 返回值：{ valid, errors, ... }
+      //          valid: 验证是否成功，成功 true，失败 false
+      //          errors：一个数组，错误提示消息
+
+      // 如果验证失败，提示错误消息，停止发送验证码
+      if (!validateResult.valid) {
+        this.$toast(validateResult.errors[0])
+        return
+      }
+      // 隐藏标签
+      this.isCountDownShow = false
+
+      // 请求数据
+      try {
+        let result = await getverity(mobile)
+        console.log('成功', result)
+      } catch (error) {
+        if (error.response.status === 429) {
+          this.$toast('请勿频繁发送')
+        } else {
+          this.$toast.fail('发送失败')
         }
-      } else {
-        this.$toast.fail('请输入手机号')
       }
     },
     // 倒计时结束执行
