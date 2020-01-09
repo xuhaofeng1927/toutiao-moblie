@@ -52,8 +52,8 @@ export default {
   data () {
     return {
       user: {
-        mobile: '',
-        code: ''
+        mobile: '13911111111',
+        code: '246810'
       },
       isCountDownShow: true,
       verityvalue: '点击获取'
@@ -91,6 +91,7 @@ export default {
           let result = await getUsersLogin(user)
           // 3，返回数据
           console.log('成功', result)
+          this.$store.commit('setuser', result.data.data) // 提交监听事件  传递数据
           this.$toast.success('登录成功')
         } catch (error) {
           console.log('失败', error)
