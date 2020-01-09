@@ -13,10 +13,10 @@
          v-slot="{ errors }" 获取校验失败的错误提示消息
       -->
       <ValidationObserver ref="myform">
-        <ValidationProvider name="手机号" rules="required">
+        <ValidationProvider name="手机号" rules="required|mobile">
           <van-field placeholder="请输入用户名/手机号/邮箱" left-icon="user-o" v-model="user.mobile"></van-field>
         </ValidationProvider>
-        <ValidationProvider name="验证码" rules="required">
+        <ValidationProvider name="验证码" rules="required|code">
           <van-field placeholder="请输入验证码" v-model="user.code">
             <van-icon slot="left-icon" class-prefix="icont" name="mima" />
             <van-button
@@ -64,7 +64,7 @@ export default {
       // 手动触发校验
       let result = await this.$refs.myform.validate() // 异步转为同步(result为boolen值)
       if (!result) {
-        // 取反不存在时执行返回
+        // 不存在时执行返回
         const errors = this.$refs.myform.errors // 获取错误返回对象
         for (let key in errors) {
           const item = errors[key]
