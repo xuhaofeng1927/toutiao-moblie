@@ -52,8 +52,8 @@ export default {
   data () {
     return {
       user: {
-        mobile: '13911111111',
-        code: '246810'
+        mobile: '',
+        code: ''
       },
       isCountDownShow: true,
       verityvalue: '点击获取'
@@ -91,7 +91,10 @@ export default {
           let result = await getUsersLogin(user)
           // 3，返回数据
           console.log('成功', result)
-          this.$store.commit('setuser', result.data.data) // 提交监听事件  传递数据
+
+          // 4，Vuex 存储Token 提交监听事件  传递数据 存储token数据
+          this.$store.commit('setuser', result.data.data)
+
           this.$toast.success('登录成功')
         } catch (error) {
           console.log('失败', error)
