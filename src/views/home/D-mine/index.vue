@@ -60,7 +60,7 @@
       <van-cell title="小智同学" is-link />
     </van-cell-group>
 
-    <van-cell-group v-if="$store.state.user">
+    <van-cell-group v-if="$store.state.user" @click="outlogin">
       <van-cell
         style="text-align: center;"
         title="退出登录"
@@ -92,6 +92,12 @@ export default {
       } catch (error) {
         this.$toast('获取用户信息失败')
       }
+    },
+    async outlogin () {
+      await this.$dialog({
+        title: '退出提示',
+        message: '您确定要退出登录吗' })
+      this.$store.commit('setuser', null)
     }
   },
   created () {

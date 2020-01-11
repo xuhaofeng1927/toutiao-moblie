@@ -11,7 +11,8 @@ import {
   Grid,
   GridItem,
   Cell,
-  CellGroup
+  CellGroup,
+  Dialog
 } from 'vant' // 在引入Vant相关的组件模块
 
 Vue.use(Button) // 全局注册相关组件模块
@@ -24,3 +25,4 @@ Vue.use(Button) // 全局注册相关组件模块
   .use(Image) // 注册图片组件
   .use(Grid).use(GridItem) // 注册GridItem外包装组件
   .use(Cell).use(CellGroup) // 注册CellGroup外包装组件
+  .use(Dialog) // 注册Dialog弹出框

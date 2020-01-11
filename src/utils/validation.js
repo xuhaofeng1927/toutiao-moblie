@@ -26,7 +26,7 @@ extend('mobile', {
   validate: value => {
     return /^1(3|5|6|7|8|9)\d{9}$/.test(value)
   },
-  message: '手机号码格式错误'
+  message: '手机号码格式不正确'
 })
 
 // 验证码规则校验
@@ -34,5 +34,5 @@ extend('code', {
   validate: value => {
     return /^\d{6}$/.test(value)
   },
-  message: '验证码格式错误'
+  message: '验证码格式不正确'
 })
