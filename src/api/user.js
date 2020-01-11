@@ -25,9 +25,9 @@ export const getUserInfo = () => {
 }
 
 // 获取个人信息接口
-export const getAutherUserInfo = id => {
+export const getAutherUserInfo = (id) => {
   return request({
-    url: '/app/v1_0/user',
-    method: 'get' // 请求方式
+    url: `/app/v1_0/users/${id}`,
+    method: 'get'// 请求方式
   })
 }

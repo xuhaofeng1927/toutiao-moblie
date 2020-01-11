@@ -1,7 +1,7 @@
 <template>
   <div class="user-container">
     <!-- 导航信息 -->
-    <van-nav-bar title="用户列表" left-arrow @click-left="onback"/>
+    <van-nav-bar :title="user.name" left-arrow @click-left="onback"/>
     <!-- /导航信息 -->
     <!-- 用户信息 -->
     <div class="user-info-container">
@@ -10,24 +10,24 @@
           class="col1"
           fit="cover"
           round
-          src="https://img.yzcdn.cn/vant/cat.jpeg"
+          :src="user.photo"
         />
         <div class="col2">
           <div class="row1">
             <div class="item">
-              <div class="count">123</div>
+              <div class="count">{{user.art_count}}</div>
               <div class="text">发布</div>
             </div>
             <div class="item">
-              <div class="count">123</div>
+              <div class="count">{{user.follow_count}}</div>
               <div class="text">关注</div>
             </div>
             <div class="item">
-              <div class="count">123</div>
+              <div class="count">{{user.fans_count}}</div>
               <div class="text">粉丝</div>
             </div>
             <div class="item">
-              <div class="count">123</div>
+              <div class="count">{{user.like_count}}</div>
               <div class="text">获赞</div>
             </div>
           </div>
@@ -46,11 +46,11 @@
       <div class="intro-wrap">
         <div>
           <span>认证：</span>
-          <span>用户的认证信息</span>
+          <span>{{user.certi}}</span>
         </div>
         <div>
           <span>简介：</span>
-          <span>用户的简介信息</span>
+          <span>{{user.intro}}</span>
         </div>
       </div>
     </div>
@@ -59,22 +59,32 @@
 </template>
 
 <script>
+import { getAutherUserInfo } from '@/api/user'
 export default {
   data () {
     return {
-
+      user: {}
     }
   },
   methods: {
     onback () {
       this.$router.go(-1)
     },
-    getAutherUserInfo () {
-
+    // 获取其他s用户信息s
+    async getAutherUserInfo () {
+      try {
+        const { userId } = this.$route.params// 获取动态IdS
+        const { data } = await getAutherUserInfo(userId)
+        this.user = data.data
+      } catch (error) {
+        this.$toast('获取用户信息失败')
+      }
     }
   },
   created () {
-    this.getUserInfo()
+    if (this.$store.state.user) {
+      this.getAutherUserInfo()
+    }
   }
 }
 </script>
