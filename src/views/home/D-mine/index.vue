@@ -8,27 +8,27 @@
             class="avatar"
             round
             fit="cover"
-            src="https://img.yzcdn.cn/vant/cat.jpeg"
+            :src="user.photo"
           />
-          <div class="title">黑马程序员</div>
+          <div class="title">{{user.name}}</div>
         </div>
         <van-button round size="mini">编辑资料</van-button>
       </div>
       <van-grid class="data-info" :border="false">
         <van-grid-item>
-          <span class="count">123</span>
+          <span class="count">{{user.art_count}}</span>
           <span class="text">头条</span>
         </van-grid-item>
         <van-grid-item>
-          <span class="count">123</span>
+          <span class="count">{{user.follow_count}}</span>
           <span class="text">关注</span>
         </van-grid-item>
         <van-grid-item>
-          <span class="count">123</span>
+          <span class="count">{{user.fans_count}}</span>
           <span class="text">粉丝</span>
         </van-grid-item>
         <van-grid-item>
-          <span class="count">123</span>
+          <span class="count">{{user.like_count}}</span>
           <span class="text">获赞</span>
         </van-grid-item>
       </van-grid>
@@ -72,11 +72,31 @@
 </template>
 
 <script>
+import { getUserInfo } from '@/api/user'
 export default {
   name: 'MyPage',
+  data () {
+    return {
+      user: {}
+    }
+  },
   methods: {
     goLogin () {
       this.$router.push('/login')
+    },
+    // 获取用户信息
+    async getUserInfo () {
+      try {
+        let { data } = await getUserInfo()
+        this.user = data.data
+      } catch (error) {
+        this.$toast('获取用户信息失败')
+      }
+    }
+  },
+  created () {
+    if (this.$store.state.user) {
+      this.getUserInfo() // 用户登陆成功获取信息
     }
   }
 }

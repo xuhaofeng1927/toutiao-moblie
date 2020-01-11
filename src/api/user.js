@@ -9,10 +9,17 @@ export const getUsersLogin = data => {
     data
   })
 }
-
+// 获取验证码接口
 export const getverity = mobile => {
   return request({
     url: `/app/v1_0/sms/codes/${mobile}`,
+    method: 'get' // 请求方式
+  })
+}
+// 获取个人信息接口
+export const getUserInfo = () => {
+  return request({
+    url: '/app/v1_0/user',
     method: 'get' // 请求方式
   })
 }
