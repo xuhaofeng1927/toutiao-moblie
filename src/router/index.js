@@ -6,16 +6,40 @@ Vue.use(VueRouter)
 // 配置路由表
 const routes = [
   {
-    path: '/',
-    redirect: '/home'
-  },
-  {
     path: '/login',
+    name: 'login',
     component: () => import ('@/views/login') // 按需加载
   },
   {
-    path: '/home',
-    component: () => import ('@/views/home') // 按需加载
+    path: '/', // 默认切换到首页
+    name: 'Home',
+    component: () => import ('@/views/home'), // 按需加载
+    children: [
+      {
+        path: '', // 默认子路由
+        redirect: '/home'
+      },
+      {
+        path: 'home',
+        name: 'home',
+        component: () => import('@/views/home/A-homePage')
+      },
+      {
+        path: 'question',
+        name: 'question',
+        component: () => import('@/views/home/B-question')
+      },
+      {
+        path: 'video',
+        name: 'video',
+        component: () => import('@/views/home/C-video')
+      },
+      {
+        path: 'mine',
+        name: 'mine',
+        component: () => import('@/views/home/D-mine')
+      }
+    ]
   }
 ]
 

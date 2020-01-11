@@ -94,7 +94,6 @@ export default {
 
           // 4，Vuex 存储Token 提交监听事件  传递数据 存储token数据
           this.$store.commit('setuser', result.data.data)
-
           this.$toast.success('登录成功')
         } catch (error) {
           console.log('失败', error)

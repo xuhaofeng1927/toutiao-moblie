@@ -5,7 +5,8 @@ import {
   NavBar,
   Field,
   Toast,
-  CountDown
+  CountDown,
+  Tabbar, TabbarItem
 } from 'vant' // 在引入Vant相关的组件模块
 
 Vue.use(Button) // 全局注册相关组件模块
@@ -14,3 +15,4 @@ Vue.use(Button) // 全局注册相关组件模块
   .use(Field) // 注册button按钮
   .use(Toast) // 注册轻提示
   .use(CountDown) // 注册倒计时
+  .use(Tabbar).use(TabbarItem) // 注册tabbar标签栏
