@@ -12,7 +12,6 @@ const routes = [
   },
   {
     path: '/', // 默认切换到首页
-    name: 'Home',
     component: () => import ('@/views/home'), // 按需加载
     children: [
       {

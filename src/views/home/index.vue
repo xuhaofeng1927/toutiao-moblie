@@ -12,7 +12,7 @@
       <van-tabbar-item
         icon="user-o"
         to="/mine"
-      >未登录</van-tabbar-item>
+      >{{$store.state.user?'个人':'未登录'}}</van-tabbar-item>
 </van-tabbar>
     <!-- /tab-bar 标签栏 -->
   </div>

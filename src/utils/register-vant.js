@@ -6,7 +6,12 @@ import {
   Field,
   Toast,
   CountDown,
-  Tabbar, TabbarItem
+  Tabbar, TabbarItem,
+  Image,
+  Grid,
+  GridItem,
+  Cell,
+  CellGroup
 } from 'vant' // 在引入Vant相关的组件模块
 
 Vue.use(Button) // 全局注册相关组件模块
@@ -16,3 +21,6 @@ Vue.use(Button) // 全局注册相关组件模块
   .use(Toast) // 注册轻提示
   .use(CountDown) // 注册倒计时
   .use(Tabbar).use(TabbarItem) // 注册tabbar标签栏
+  .use(Image) // 注册图片组件
+  .use(Grid).use(GridItem) // 注册GridItem外包装组件
+  .use(Cell).use(CellGroup) // 注册CellGroup外包装组件
