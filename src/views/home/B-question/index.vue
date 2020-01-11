@@ -1,5 +1,7 @@
 <template>
-  <div class="qa-container">问答</div>
+  <div class="qa-container">
+     <van-nav-bar title="问题" />
+  </div>
 </template>
 
 <script>

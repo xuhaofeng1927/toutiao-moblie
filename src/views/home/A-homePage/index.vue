@@ -1,13 +1,12 @@
 <template>
-    <div class="home-container">首页</div>
+  <div class="home-container">
+    <van-nav-bar title="首页" />
+  </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {}
 </script>
 
 <style>
-
 </style>
