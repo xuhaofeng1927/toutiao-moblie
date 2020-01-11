@@ -13,7 +13,8 @@ import {
   Cell,
   CellGroup,
   Dialog,
-  List
+  List,
+  Tab, Tabs
 } from 'vant' // 在引入Vant相关的组件模块
 
 Vue.use(Button) // 全局注册相关组件模块
@@ -28,3 +29,4 @@ Vue.use(Button) // 全局注册相关组件模块
   .use(Cell).use(CellGroup) // 注册CellGroup外包装组件
   .use(Dialog) // 注册Dialog弹出框
   .use(List) // 注册List列表
+  .use(Tab).use(Tabs)// 注册Tab标签栏

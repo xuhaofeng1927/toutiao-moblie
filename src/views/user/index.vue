@@ -86,7 +86,7 @@ export default {
         per_page: 20 // 每页加载的条数
       })
       const { results } = data.data // 获取文章最新列表
-      console.log(results)
+      // console.log(results)
       this.list.push(...results) // 将每次获取到的数据添加到list数据中
       // 加载状态结束
       this.loading = false
