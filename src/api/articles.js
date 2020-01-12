@@ -9,3 +9,12 @@ export const getArticlesUserInfo = (id, params) => {
     params
   })
 }
+
+// 获取频道标签列表
+export const getChannelsArticles = params => {
+  return request({
+    url: `/app/v1_1/articles`,
+    method: 'get', // 请求方式
+    params
+  })
+}

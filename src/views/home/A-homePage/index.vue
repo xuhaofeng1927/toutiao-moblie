@@ -5,7 +5,9 @@
     <!-- /导航 -->
     <!-- Tab标签栏 -->
     <van-tabs v-model="active" swipeable>
-      <van-tab v-for="item in list" :key="item.id" :title="item.name">标签{{item.id}}</van-tab>
+      <van-tab v-for="(item,index) in list" :key="index" :title="item.name">
+        <Article-list :channel="item"></Article-list>
+      </van-tab>
     </van-tabs>
     <!-- /Tab标签栏 -->
   </div>
