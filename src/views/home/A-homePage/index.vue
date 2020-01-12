@@ -1,15 +1,32 @@
 <template>
   <div class="home-container">
     <!-- 导航 -->
-    <van-nav-bar title="首页" fixed  />
+    <van-nav-bar title="首页" fixed />
     <!-- /导航 -->
     <!-- Tab标签栏 -->
-    <van-tabs v-model="active" swipeable >
+    <van-tabs v-model="active" swipeable>
+      <van-icon
+        class="wap-nav"
+        slot="nav-right"
+        name="wap-nav"
+        @click="isChannelEditShow = true"
+      />
       <van-tab v-for="(item,index) in list" :key="index" :title="item.name">
         <Article-list :channel="item"></Article-list>
       </van-tab>
     </van-tabs>
     <!-- /Tab标签栏 -->
+    <!-- 弹出框组件 -->
+    <van-popup
+      v-model="isChannelEditShow"
+      position="bottom"
+      round
+      closeable
+      close-icon="close"
+      close-icon-position="top-left"
+      :style="{ height: '100%' }"
+    />
+    <!-- /弹出框组件 -->
   </div>
 </template>
 
@@ -19,7 +36,8 @@ export default {
   data () {
     return {
       active: 0, // 控制标签页的激活项
-      list: {}
+      list: {},
+      isChannelEditShow: false // 显示弹出框
     }
   },
   methods: {
@@ -41,7 +59,17 @@ export default {
 .home-container {
   padding-top: 90px;
   padding-bottom: 50px;
-  /deep/ .van-tabs__wrap { // 深度调整根组件内部标签样式
+  .wap-nav {
+    position: fixed;
+    right: 0;
+    line-height: 44px;
+    background: #fff;
+    opacity: .8;
+    font-size: 24px;
+    padding-right: 5px;
+}
+  /deep/ .van-tabs__wrap {
+    // 深度调整根组件内部标签样式
     position: fixed;
     top: 46px;
     left: 0;

@@ -30,7 +30,7 @@ export default {
       finished: false,
       timestamp: null, // 用于获取下一页数据的时间戳
       isLoading: false,
-      title: '' // 判断数据有没有刷新
+      title: ''// 判断下拉数据有没有刷新
     }
   },
   methods: {
@@ -42,7 +42,8 @@ export default {
         with_top: 1 // 是否包含置顶，进入页面第一次请求时要包含置顶文章，1-包含置顶，0-不包含
       })
       const { results } = data.data
-      if (this.title !== results[0].title) { // 判断数据是否为最新数据
+      if (this.title !== results[0].title) {
+        // 判断数据是否为最新数据
         this.title = results[0].title // 将新的数据赋值给旧的数据
         // 如果有最新数据，则把数据放到列表的顶部
         this.list.unshift(...results) // 将数据显示在列表前面
