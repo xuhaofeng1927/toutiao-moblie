@@ -11,7 +11,7 @@
         name="wap-nav"
         @click="isChannelEditShow = true"
       />
-      <van-tab v-for="(item,index) in list" :key="index" :title="item.name">
+      <van-tab v-for="(item,index) in Channelslist" :key="index" :title="item.name">
         <Article-list :channel="item"></Article-list>
       </van-tab>
     </van-tabs>
@@ -25,7 +25,11 @@
       close-icon="close"
       close-icon-position="top-left"
       :style="{ height: '100%' }"
-    />
+    >
+    <!-- 频道编辑组件 接收父组件传过来的值Channelslist-->
+    <Channels-list :Channelslist='Channelslist'></Channels-list>
+    <!-- /频道编辑组件 -->
+    </van-popup>
     <!-- /弹出框组件 -->
   </div>
 </template>
@@ -36,7 +40,7 @@ export default {
   data () {
     return {
       active: 0, // 控制标签页的激活项
-      list: {},
+      Channelslist: {},
       isChannelEditShow: false // 显示弹出框
     }
   },
@@ -46,7 +50,7 @@ export default {
       // 获取数据
       const { data } = await getHomeUserChannels()
       // 数据赋值
-      this.list = data.data.channels
+      this.Channelslist = data.data.channels
     }
   },
   created () {
