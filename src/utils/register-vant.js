@@ -14,7 +14,8 @@ import {
   CellGroup,
   Dialog,
   List,
-  Tab, Tabs
+  Tab, Tabs,
+  PullRefresh
 } from 'vant' // 在引入Vant相关的组件模块
 
 Vue.use(Button) // 全局注册相关组件模块
@@ -30,3 +31,4 @@ Vue.use(Button) // 全局注册相关组件模块
   .use(Dialog) // 注册Dialog弹出框
   .use(List) // 注册List列表
   .use(Tab).use(Tabs)// 注册Tab标签栏
+  .use(PullRefresh) // 注册PullRefresh下拉刷新

@@ -23,6 +23,7 @@ export default {
     }
   },
   methods: {
+    // 获取用户频道列表
     async getHomeUserChannels () {
       // 获取数据
       const { data } = await getHomeUserChannels()
