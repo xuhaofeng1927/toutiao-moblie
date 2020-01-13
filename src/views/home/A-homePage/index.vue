@@ -5,12 +5,7 @@
     <!-- /导航 -->
     <!-- Tab标签栏 -->
     <van-tabs v-model="active" swipeable>
-      <van-icon
-        class="wap-nav"
-        slot="nav-right"
-        name="wap-nav"
-        @click="isChannelEditShow = true"
-      />
+      <van-icon class="wap-nav" slot="nav-right" name="wap-nav" @click="isChannelEditShow = true" />
       <van-tab v-for="(item,index) in Channelslist" :key="index" :title="item.name">
         <Article-list :channel="item"></Article-list>
       </van-tab>
@@ -26,9 +21,9 @@
       close-icon-position="top-left"
       :style="{ height: '100%' }"
     >
-    <!-- 频道编辑组件 接收父组件传过来的值Channelslist-->
-    <Channels-list :Channelslist='Channelslist'></Channels-list>
-    <!-- /频道编辑组件 -->
+      <!-- 频道编辑组件 接收父组件传过来的值Channelslist-->
+      <Channels-list :Channelslist="Channelslist" @switch="showSwitchChannels"></Channels-list>
+      <!-- /频道编辑组件 -->
     </van-popup>
     <!-- /弹出框组件 -->
   </div>
@@ -51,6 +46,11 @@ export default {
       const { data } = await getHomeUserChannels()
       // 数据赋值
       this.Channelslist = data.data.channels
+    },
+    showSwitchChannels (index) {
+      this.isChannelEditShow = false // 关闭弹窗
+      // this.active = this.$store.state.index // 展示当前点击页面
+      this.active = index // 展示当前点击页面
     }
   },
   created () {
@@ -68,10 +68,10 @@ export default {
     right: 0;
     line-height: 44px;
     background: #fff;
-    opacity: .8;
+    opacity: 0.8;
     font-size: 24px;
     padding-right: 5px;
-}
+  }
   /deep/ .van-tabs__wrap {
     // 深度调整根组件内部标签样式
     position: fixed;

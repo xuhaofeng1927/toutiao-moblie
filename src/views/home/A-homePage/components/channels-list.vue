@@ -7,7 +7,8 @@
     </van-cell>
 
     <van-grid :gutter="10">
-      <van-grid-item v-for="(item,index) in Channelslist" :key="index" :text="item.name" @click="deleteChannels(index)">
+      <van-grid-item v-for="(item,index) in Channelslist" :key="index" :text="item.name" @click="
+      deleteChannels(index)">
         <van-icon v-show="isEditShow && index !== 0" slot="icon" name="close" />
       </van-grid-item>
     </van-grid>
@@ -75,6 +76,9 @@ export default {
     deleteChannels (index) {
       if (this.isEditShow && index !== 0) {
         this.Channelslist.splice(index, 1) // 删除当前索引的值
+      } else {
+        // this.$store.commit('showSwitch', index) // 传递要切换的值
+        this.$emit('switch', index)
       }
     }
   },
