@@ -12,7 +12,12 @@
 
     <van-cell title="推荐频道" :border="false" />
     <van-grid :gutter="10">
-      <van-grid-item v-for="(item,index) in remanentChannels" :key="index" :text="item.name" />
+      <van-grid-item
+        v-for="(item,index) in remanentChannels"
+        :key="index"
+        :text="item.name"
+        @click="onChannelAdd(item)"
+      />
     </van-grid>
   </div>
 </template>
@@ -32,22 +37,26 @@ export default {
     }
   },
   computed: {
-    // eslint-disable-next-line vue/return-in-computed-property
     remanentChannels () {
+      // console.log(1)
       const { Channelslist, allChannels } = this // 获取用户列表和所有列表
+      // console.log(Channelslist)
       const channels = [] // 定义一个新的数组用来接收剩余频道
       // 推荐频道 = 所有频道 - 用户列表
       // remanentChannels = allChannels - Channelslist
       if (allChannels) {
         // 遍历所有频道
         allChannels.forEach(item => {
-          if (Channelslist.find(i => i.id !== item.id)) {
+          console.log(item)
+          if (!Channelslist.find(i => i.id === item.id)) {
             channels.push(item) // 遍历每一项不等与用户列表数据的值
           }
         })
+        // console.log(channels)
         return channels // 返回获取到的剩余频道列表值
       } else {
         this.$toast('无法获取频道信息')
+        return []
       }
     }
   },
@@ -58,6 +67,10 @@ export default {
       const { data } = await getAllChannels()
       // 获取数据
       this.allChannels = data.data.channels // 赋值给allChannels
+    },
+    // 推荐添加到我的频道
+    onChannelAdd (params) {
+      this.Channelslist.push(params) // 频道中添加要添加的频道
     }
   },
   created () {
