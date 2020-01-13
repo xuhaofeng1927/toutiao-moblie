@@ -7,7 +7,7 @@
     </van-cell>
 
     <van-grid :gutter="10">
-      <van-grid-item v-for="(item,index) in Channelslist" :key="index" :text="item.name">
+      <van-grid-item v-for="(item,index) in Channelslist" :key="index" :text="item.name" @click="deleteChannels(index)">
         <van-icon v-show="isEditShow && index !== 0" slot="icon" name="close" />
       </van-grid-item>
     </van-grid>
@@ -67,8 +67,15 @@ export default {
       this.Channelslist.push(params) // 频道中添加要添加的频道
       // 不需要删除，我的频道改变，计算属性 recommendChannels 重新调用求值
     },
+    // 控制删除开关的显隐
     openClose () {
       this.isEditShow = !this.isEditShow
+    },
+    // 当删除开关打开时（编辑状态）点击删除对应的元素
+    deleteChannels (index) {
+      if (this.isEditShow && index !== 0) {
+        this.Channelslist.splice(index, 1) // 删除当前索引的值
+      }
     }
   },
   created () {
