@@ -7,9 +7,14 @@
     </van-cell>
 
     <van-grid :gutter="10">
-      <van-grid-item v-for="(item,index) in Channelslist" :key="index" :text="item.name" @click="
-      deleteChannels(index)">
+      <van-grid-item
+        v-for="(item,index) in Channelslist"
+        :key="index"
+        @click="
+      deleteChannels(index)"
+      >
         <van-icon v-show="isEditShow && index !== 0" slot="icon" name="close" />
+        <span class='text' :class="{active:index===active}" slot="text">{{item.name}}</span>
       </van-grid-item>
     </van-grid>
 
@@ -28,7 +33,7 @@
 <script>
 import { getAllChannels } from '@/api/channels'
 export default {
-  props: ['Channelslist'], // 接收父组件传过来的属性值
+  props: ['Channelslist', 'active'], // 接收父组件传过来的属性值
   data () {
     return {
       allChannels: [], // 所有频道
@@ -92,13 +97,20 @@ export default {
 .channel-edit {
   padding: 40px 18px 0;
   /deep/ .van-grid-item__icon-wrapper {
-  position: absolute;
-  top: -22px;
-  right: -7px;
-  .van-icon-close {
-    font-size: 14px;
-    color: red
+    position: absolute;
+    top: -22px;
+    right: -7px;
+    .van-icon-close {
+      font-size: 14px;
+      color: red;
+    }
   }
-}
+  .van-grid-item__text, .text {
+      font-size: 14px;
+      color: #222;
+    }
+  .active {
+    color: red;
+  }
 }
 </style>

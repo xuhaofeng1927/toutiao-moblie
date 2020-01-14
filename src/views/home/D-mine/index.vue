@@ -3,7 +3,7 @@
     <!-- 已登录：用户信息 -->
     <div class="user-info-wrap" v-if="$store.state.user">
       <div class="base-info-wrap">
-        <div class="avatar-title-wrap">
+        <div class="avatar-title-wrap" @click="showUserInfo(user.id)">
           <van-image
             class="avatar"
             round
@@ -81,6 +81,11 @@ export default {
     }
   },
   methods: {
+    // 跳转用户信息页面
+    showUserInfo (id) {
+      this.$router.push(`/user/${id}`)
+    },
+    // 返回登陆
     goLogin () {
       this.$router.push('/login')
     },
@@ -93,6 +98,7 @@ export default {
         this.$toast('获取用户信息失败')
       }
     },
+    // 退出登录
     async outlogin () {
       await this.$dialog({
         title: '退出提示',

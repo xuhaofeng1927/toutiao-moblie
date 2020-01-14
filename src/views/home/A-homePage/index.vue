@@ -22,7 +22,7 @@
       :style="{ height: '100%' }"
     >
       <!-- 频道编辑组件 接收父组件传过来的值Channelslist-->
-      <Channels-list :Channelslist="Channelslist" @switch="showSwitchChannels"></Channels-list>
+      <Channels-list :Channelslist="Channelslist" :active='active' @switch="showSwitchChannels"></Channels-list>
       <!-- /频道编辑组件 -->
     </van-popup>
     <!-- /弹出框组件 -->
@@ -31,6 +31,7 @@
 
 <script>
 import { getHomeUserChannels } from '@/api/channels' // 引入用户频道接口
+import { getItem, setItem } from '@/utils/storage'
 export default {
   data () {
     return {
@@ -39,13 +40,33 @@ export default {
       isChannelEditShow: false // 显示弹出框
     }
   },
+  watch: {
+  // 当 userChannels 发生改变的时候，将该数据存储到本地存储
+    Channelslist () {
+      setItem('user-channels', this.Channelslist)
+    }
+  },
+
   methods: {
     // 获取用户频道列表
     async getHomeUserChannels () {
       // 获取数据
       const { data } = await getHomeUserChannels()
+
+      // 1. 定义一个变量用来存储频道列表
+      let channels = []
+      // 2. 获取本地存储的频道列表
+      const localHomeUserChannles = getItem('user-channels')
+
+      if (localHomeUserChannles) {
+        // 如果本地存储有值使用本地存储的频道列表
+        channels = localHomeUserChannles
+      } else {
+        // 如果本地存储没有值使用默认接口获取到的频道列表
+        channels = data.data.channels
+      }
       // 数据赋值
-      this.Channelslist = data.data.channels
+      this.Channelslist = channels
     },
     showSwitchChannels (index) {
       this.isChannelEditShow = false // 关闭弹窗
