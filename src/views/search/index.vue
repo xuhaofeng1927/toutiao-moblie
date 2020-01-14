@@ -1,6 +1,5 @@
 <template>
   <div class="search-container">
-
     <!-- 搜索栏 -->
     <form action="/" class="search-form">
       <van-search
@@ -14,13 +13,17 @@
       />
     </form>
     <!-- /搜索栏 -->
-      <Search-result v-if="isResultShow"></Search-result>
-     <!-- 搜索结果 -->
+    <Search-result v-if="isResultShow"></Search-result>
+    <!-- 搜索结果 -->
     <!-- /搜索结果 -->
 
     <!-- 联想建议 -->
     <van-cell-group v-else-if="searchContent">
-      <van-cell icon="search" :title="item" v-for="(item,index) in suggestions" :key="index"/>
+      <van-cell icon="search" :title="item" v-for="(item,index) in suggestions" :key="index">
+        <!-- 我们要把 item 处理成带有高亮的字符串 -->
+        <!-- 过滤器：专门用于文本格式化，但是它只能用在 {{}} 和 v-bind 中 -->
+        <div slot="title" v-html="lightText(item)"></div>
+      </van-cell>
     </van-cell-group>
     <!-- /联想建议 -->
 
@@ -50,7 +53,6 @@
       </van-cell>
     </van-cell-group>
     <!-- /历史记录 -->
-
   </div>
 </template>
 
@@ -84,6 +86,11 @@ export default {
       const { data } = await getSuggestions(searchContent)
       this.suggestions = data.data.options
       console.log(data.data.options)
+    },
+    // 替换高亮字体方法（正则表达）
+    lightText (str) {
+      const reg = new RegExp(this.searchContent, 'ig')
+      return str.replace(reg, `<span style="color: deeppink">${this.searchContent}</span>`)
     }
   }
 }
