@@ -1,7 +1,14 @@
 <template>
   <div class="home-container">
     <!-- 导航 -->
-    <van-nav-bar title="首页" fixed />
+    <van-nav-bar fixed>
+      <span class="logo" slot="left">
+        <img src="./logo-light.png" alt="">
+      </span>
+      <van-button type="info" slot="right" size="small" round icon="search" to="/search">
+      搜索
+      </van-button>
+    </van-nav-bar>
     <!-- /导航 -->
     <!-- Tab标签栏 -->
     <van-tabs v-model="active" swipeable>
@@ -22,7 +29,7 @@
       :style="{ height: '100%' }"
     >
       <!-- 频道编辑组件 接收父组件传过来的值Channelslist-->
-      <Channels-list :Channelslist="Channelslist" :active='active' @switch="showSwitchChannels"></Channels-list>
+      <Channels-list :Channelslist="Channelslist" :active="active" @switch="showSwitchChannels"></Channels-list>
       <!-- /频道编辑组件 -->
     </van-popup>
     <!-- /弹出框组件 -->
@@ -41,7 +48,7 @@ export default {
     }
   },
   watch: {
-  // 当 userChannels 发生改变的时候，将该数据存储到本地存储
+    // 当 userChannels 发生改变的时候，将该数据存储到本地存储
     Channelslist () {
       setItem('user-channels', this.Channelslist)
     }
@@ -82,6 +89,26 @@ export default {
 
 <style lang='less' scoped>
 .home-container {
+  .van-nav-bar {
+    .logo {
+      display: flex;
+      margin-bottom:10px;
+      width: 100px;
+      height: 100%;
+      img {
+        width: 100%;
+      }
+    }
+    .van-nav-bar__right {
+      .van-button {
+        width: 200px;
+      }
+      color: #fff;
+      .van-icon {
+        color: #fff;
+      }
+    }
+  }
   padding-top: 90px;
   padding-bottom: 50px;
   .wap-nav {

@@ -16,6 +16,11 @@ const routes = [
     component: () => import ('@/views/user') // 按需加载
   },
   {
+    path: '/search',
+    name: 'search',
+    component: () => import('@/views/search') // 按需加载
+  },
+  {
     path: '/', // 默认切换到首页
     component: () => import ('@/views/home'), // 按需加载
     children: [
