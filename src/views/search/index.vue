@@ -10,6 +10,7 @@
         background="#3296fa"
         @search="onSearch"
         @cancel="onCancel"
+        @input="onSearchInput"
       />
     </form>
     <!-- /搜索栏 -->
@@ -19,12 +20,7 @@
 
     <!-- 联想建议 -->
     <van-cell-group v-else-if="searchContent">
-      <van-cell icon="search" title="单元格" />
-      <van-cell icon="search" title="单元格" />
-      <van-cell icon="search" title="单元格" />
-      <van-cell icon="search" title="单元格" />
-      <van-cell icon="search" title="单元格" />
-      <van-cell icon="search" title="单元格" />
+      <van-cell icon="search" :title="item" v-for="(item,index) in suggestions" :key="index"/>
     </van-cell-group>
     <!-- /联想建议 -->
 
@@ -59,6 +55,7 @@
 </template>
 
 <script>
+import { getSuggestions } from '@/api/search'
 export default {
   name: 'SearchPage',
   props: {},
@@ -66,15 +63,27 @@ export default {
     return {
       searchContent: '', // 搜索内容
       // 控制搜索结果的显示状态
-      isResultShow: false
+      isResultShow: false,
+      suggestions: [] // 联想记忆数据
     }
   },
   methods: {
     onSearch () {
-      console.log('onSearch')
+      this.isResultShow = true
     },
     onCancel () {
       console.log('onCancel')
+    },
+    // 输入事件获取联想记忆数据
+    async onSearchInput () {
+      const searchContent = this.searchContent // 接收输入数据
+      if (!searchContent) {
+        return // 如果为空结束并返回
+      }
+      // 获取联想记忆数据
+      const { data } = await getSuggestions(searchContent)
+      this.suggestions = data.data.options
+      console.log(data.data.options)
     }
   }
 }
