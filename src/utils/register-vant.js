@@ -16,7 +16,8 @@ import {
   List,
   Tab, Tabs,
   PullRefresh,
-  Popup
+  Popup,
+  Search
 } from 'vant' // 在引入Vant相关的组件模块
 
 // 全局注册相关组件模块 （链式调用）
@@ -35,3 +36,4 @@ Vue.use(Button) // 注册button按钮
   .use(Tab).use(Tabs)// 注册Tab标签栏
   .use(PullRefresh) // 注册PullRefresh下拉刷新
   .use(Popup) // 注册Popup弹出框
+  .use(Search) // 注册Search搜索框
