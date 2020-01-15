@@ -7,7 +7,7 @@
         placeholder="请输入搜索关键词"
         show-action
         background="#3296fa"
-        @search="onSearch"
+        @search="onSearch(searchContent)"
         @cancel="onCancel"
         @input="onSearchInput"
       />
@@ -19,7 +19,7 @@
 
     <!-- 联想建议 -->
     <van-cell-group v-else-if="searchContent">
-      <van-cell icon="search" :title="item" v-for="(item,index) in suggestions" :key="index">
+      <van-cell icon="search" :title="item" v-for="(item,index) in suggestions" @click="onSearch(item)" :key="index">
         <!-- 我们要把 item 处理成带有高亮的字符串 -->
         <!-- 过滤器：专门用于文本格式化，但是它只能用在 {{}} 和 v-bind 中 -->
         <div slot="title" v-html="lightText(item)"></div>
@@ -36,19 +36,7 @@
         <span>完成</span>
       </van-cell>
 
-      <van-cell title="单元格">
-        <van-icon name="close"></van-icon>
-      </van-cell>
-      <van-cell title="单元格">
-        <van-icon name="close"></van-icon>
-      </van-cell>
-      <van-cell title="单元格">
-        <van-icon name="close"></van-icon>
-      </van-cell>
-      <van-cell title="单元格">
-        <van-icon name="close"></van-icon>
-      </van-cell>
-      <van-cell title="单元格">
+      <van-cell :title="item" v-for="(item,index) in searchHistories" :key="index">
         <van-icon name="close"></van-icon>
       </van-cell>
     </van-cell-group>
@@ -67,11 +55,25 @@ export default {
       searchContent: '', // 搜索内容
       // 控制搜索结果的显示状态
       isResultShow: false,
-      suggestions: [] // 联想记忆数据
+      suggestions: [], // 联想记忆数据
+      searchHistories: [] // 搜索历史记录数据
+
     }
   },
   methods: {
-    onSearch () {
+    onSearch (value) {
+      // value: 输入框当前值
+      // 更新搜索文本框的数据(三种状态输入关键字，联想建议关键字，历史记录关键字)
+      this.searchContent = value
+      // 定义一个变量接收本次历史记录
+      const searchHistories = this.searchHistories
+      // 定义一个变量接收【本次历史记录】是否存在 （搜索框中） 的一个值
+      const index = searchHistories.indexOf(value)
+      if (index !== -1) {
+        searchHistories.splice(index) // 如果存在     删除当前数据
+      }
+      this.searchHistories.unshift(value) // 如果不存在   在数组前面添加新数据
+      // 搜索结果组件显示状态
       this.isResultShow = true
     },
     onCancel () {
@@ -83,6 +85,7 @@ export default {
     // 返回值：防抖之后的函数，和参数1功能是一样的
     // 输入事件获取联想记忆数据
     onSearchInput: debounce(async function () {
+      this.isResultShow = false // 输入状态下隐藏搜索结果
       const searchContent = this.searchContent // 接收输入数据
       if (!searchContent) {
         return // 如果为空结束并返回
@@ -91,8 +94,7 @@ export default {
       const { data } = await getSuggestions(searchContent)
       // 2. 将数据添加到组件实例中
       this.suggestions = data.data.options
-      console.log(data.data.options)
-    }, 500),
+    }, 200),
     // 替换高亮字体方法（正则表达）
     lightText (str) {
       const reg = new RegExp(this.searchContent, 'ig')
