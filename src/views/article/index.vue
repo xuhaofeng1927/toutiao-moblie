@@ -1,85 +1,46 @@
 <template>
   <div class="article-container">
     <!-- 导航栏 -->
-    <van-nav-bar
-      title="文章详情"
-      left-arrow
-      fixed
-      @click-left="$router.back()"
-    ></van-nav-bar>
+    <van-nav-bar title="文章详情" left-arrow fixed @click-left="$router.back()"></van-nav-bar>
     <!-- /导航栏 -->
 
     <!-- 加载中 -->
-    <van-loading
-      class="loading"
-      color="#1989fa"
-      vertical
-    >
+    <van-loading class="loading" color="#1989fa" vertical v-if="loading">
       <slot>加载中...</slot>
     </van-loading>
     <!-- /加载中 -->
 
     <!-- 文章详情 -->
-    <div class="detail">
-      <h3 class="title">一个合格的中级前端工程师需要掌握的 28 个 JavaScript 技巧</h3>
+    <div class="detail" v-else-if="ArticleList.title">
+      <h3 class="title">{{ArticleList.title}}</h3>
       <div class="author-wrap">
         <div class="base-info">
-          <van-image
-            class="avatar"
-            round
-            fit="cover"
-            src=""
-          />
+          <van-image class="avatar" round fit="cover" :src="ArticleList.aut_photo" />
           <div class="text">
-            <p class="name">黑马头条号</p>
-            <p class="time">4 小时前</p>
+            <p class="name">{{ArticleList.aut_name}}</p>
+            <p class="time">{{ArticleList.pubdate}}</p>
           </div>
         </div>
         <van-button class="follow-btn" type="info" size="small" round>+ 关注</van-button>
       </div>
-      <div class="markdown-body">
-        <p>作为战斗在业务一线的前端，要想少加班，就要想办法提高工作效率。这里提一个小点，我们在业务开发过程中，经常会重复用到日期格式化、url参数转对象、浏览器类型判断、节流函数等一类函数，这些工具类函数，基本上在每个项目都会用到，为避免不同项目多次复制粘贴的麻烦，我们可以统一封装，发布到npm，以提高开发效率。</p>
-        <p>使用 Object.prototype.toString 配合闭包，通过传入不同的判断类型来返回不同的判断函数，一行代码，简洁优雅灵活（注意传入 type 参数时首字母大写）</p>
-        <p>使用 Object.prototype.toString 配合闭包，通过传入不同的判断类型来返回不同的判断函数，一行代码，简洁优雅灵活（注意传入 type 参数时首字母大写）</p>
-        <p>使用 Object.prototype.toString 配合闭包，通过传入不同的判断类型来返回不同的判断函数，一行代码，简洁优雅灵活（注意传入 type 参数时首字母大写）</p>
-        <p>使用 Object.prototype.toString 配合闭包，通过传入不同的判断类型来返回不同的判断函数，一行代码，简洁优雅灵活（注意传入 type 参数时首字母大写）</p>
-      </div>
+      <div class="markdown-body" v-html="ArticleList.content"></div>
     </div>
     <!-- /文章详情 -->
 
     <!-- 加载失败提示 -->
-    <div class="error">
-      <img src="./no-network.png" alt="no-network">
+    <div class="error" v-else>
+      <img src="./no-network.png" alt="no-network" />
       <p class="text">亲，网络不给力哦~</p>
-      <van-button
-        class="btn"
-        type="default"
-        size="small"
-      >点击重试</van-button>
+      <van-button class="btn" type="default" size="small" @click="getArticle()">点击重试</van-button>
     </div>
     <!-- /加载失败提示 -->
 
     <!-- 底部区域 -->
     <div class="footer">
-      <van-button
-        class="write-btn"
-        type="default"
-        round
-        size="small"
-      >写评论</van-button>
-      <van-icon
-        class="comment-icon"
-        name="comment-o"
-        info="9"
-      />
-      <van-icon
-        color="orange"
-        name="star"
-      />
-      <van-icon
-        color="#e5645f"
-        name="good-job"
-      />
+      <van-button class="write-btn" type="default" round size="small">写评论</van-button>
+      <van-icon class="comment-icon" name="comment-o" info="9" />
+      <van-icon color="orange" name="star" />
+      <van-icon color="#e5645f" name="good-job" />
       <van-icon class="share-icon" name="share" />
     </div>
     <!-- /底部区域 -->
@@ -87,6 +48,7 @@
 </template>
 
 <script>
+import { getArticleById } from '@/api/articles'
 export default {
   name: 'ArticlePage',
   props: {
@@ -94,6 +56,27 @@ export default {
       type: String,
       required: true
     }
+  },
+  data () {
+    return {
+      loading: true, // 控制加载状态的显示
+      ArticleList: {} // 文章详情列表
+    }
+  },
+  methods: {
+    async getArticle () {
+      this.loading = true // 重新加载时显示加载状态
+      try {
+        const { data } = await getArticleById(this.articleId)
+        this.ArticleList = data.data
+      } catch (error) {
+        console.log(error)
+      }
+      this.loading = false //
+    }
+  },
+  created () {
+    this.getArticle()
   }
 }
 </script>
@@ -113,7 +96,7 @@ export default {
       margin: 0;
       padding-top: 24px;
       font-size: 20px;
-      color: #3A3A3A;
+      color: #3a3a3a;
     }
     .author-wrap {
       display: flex;
