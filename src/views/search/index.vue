@@ -53,6 +53,7 @@
 <script>
 import { getSuggestions } from '@/api/search'
 import { debounce } from 'lodash' // 引入防抖规则函数
+import { getItem, setItem } from '@/utils/storage' // 引入本地存储函数封装
 export default {
   name: 'SearchPage',
   props: {},
@@ -62,8 +63,13 @@ export default {
       // 控制搜索结果的显示状态
       isResultShow: false,
       suggestions: [], // 联想记忆数据
-      searchHistories: [], // 搜索历史记录数据
+      searchHistories: getItem('serach-histories') || [], // 搜索历史记录数据/如果本地存储有值用本地存储的
       isDeleteShow: false // 控制历史记录删除条件
+    }
+  },
+  watch: {
+    searchHistories (newvalue) {
+      setItem('serach-histories', newvalue)
     }
   },
   methods: {
