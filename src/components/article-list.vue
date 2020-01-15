@@ -4,7 +4,7 @@
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
       <!-- 列表组件 -->
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-        <van-cell v-for="(item,index) in list" :key="index" :title="item.title" />
+        <van-cell v-for="(item,index) in list" :key="index" :title="item.title" :to="`/article/${item.aut_id}`"/>
       </van-list>
       <!-- /列表组件 -->
     </van-pull-refresh>

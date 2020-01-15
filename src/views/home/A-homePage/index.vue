@@ -14,7 +14,9 @@
     <van-tabs v-model="active" swipeable>
       <van-icon class="wap-nav" slot="nav-right" name="wap-nav" @click="isChannelEditShow = true" />
       <van-tab v-for="(item,index) in Channelslist" :key="index" :title="item.name">
+        <!-- 文章列表 -->
         <Article-list :channel="item"></Article-list>
+        <!-- /文章列表 -->
       </van-tab>
     </van-tabs>
     <!-- /Tab标签栏 -->
