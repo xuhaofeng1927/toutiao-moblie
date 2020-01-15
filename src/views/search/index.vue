@@ -13,7 +13,7 @@
       />
     </form>
     <!-- /搜索栏 -->
-    <Search-result v-if="isResultShow"></Search-result>
+    <Search-result v-if="isResultShow" :q="searchContent"></Search-result>
     <!-- 搜索结果 -->
     <!-- /搜索结果 -->
 
@@ -58,6 +58,7 @@
 
 <script>
 import { getSuggestions } from '@/api/search'
+import { debounce } from 'lodash' // 引入防抖规则函数
 export default {
   name: 'SearchPage',
   props: {},
@@ -76,17 +77,22 @@ export default {
     onCancel () {
       console.log('onCancel')
     },
+    // debounce 函数
+    // 参数1：函数
+    // 参数2：防抖时间
+    // 返回值：防抖之后的函数，和参数1功能是一样的
     // 输入事件获取联想记忆数据
-    async onSearchInput () {
+    onSearchInput: debounce(async function () {
       const searchContent = this.searchContent // 接收输入数据
       if (!searchContent) {
         return // 如果为空结束并返回
       }
       // 获取联想记忆数据
       const { data } = await getSuggestions(searchContent)
+      // 2. 将数据添加到组件实例中
       this.suggestions = data.data.options
       console.log(data.data.options)
-    },
+    }, 500),
     // 替换高亮字体方法（正则表达）
     lightText (str) {
       const reg = new RegExp(this.searchContent, 'ig')
