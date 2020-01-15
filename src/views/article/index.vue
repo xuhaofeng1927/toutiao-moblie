@@ -39,7 +39,7 @@
     <div class="footer">
       <van-button class="write-btn" type="default" round size="small">写评论</van-button>
       <van-icon class="comment-icon" name="comment-o" info="9" />
-      <van-icon color="orange" name="star" />
+      <van-icon color="orange" :name="ArticleList.is_collected?'star':'star-o'"  @click="onCollect(ArticleList.is_collected)"/>
       <van-icon color="#e5645f" name="good-job" />
       <van-icon class="share-icon" name="share" />
     </div>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { getArticleById } from '@/api/articles'
+import { getArticleById, addCollect, cancelCollect } from '@/api/articles'
 export default {
   name: 'ArticlePage',
   props: {
@@ -64,6 +64,7 @@ export default {
     }
   },
   methods: {
+    // 获取文章详情列表
     async getArticle () {
       this.loading = true // 重新加载时显示加载状态
       try {
@@ -73,6 +74,23 @@ export default {
         console.log(error)
       }
       this.loading = false //
+    },
+    async onCollect (collected) {
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        message: '操作中...',
+        forbidClick: true // 是否禁止背景点击
+      })
+      if (collected) {
+        // 如果是以收藏，要取消收藏
+        await cancelCollect(this.articleId)
+        this.ArticleList.is_collected = false
+        this.$toast.success('取消收藏')
+      } else {
+        await addCollect(this.articleId)
+        this.ArticleList.is_collected = true
+        this.$toast.success('收藏成功')
+      }
     }
   },
   created () {
