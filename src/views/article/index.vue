@@ -33,6 +33,10 @@
         >{{ ArticleList.is_followed ? '已关注' : '+ 关注' }}</van-button>
       </div>
       <div class="markdown-body" v-html="ArticleList.content"></div>
+
+      <!-- 文章评论 -->
+      <Article-comment></Article-comment>
+      <!-- /文章评论 -->
     </div>
     <!-- /文章详情 -->
 
