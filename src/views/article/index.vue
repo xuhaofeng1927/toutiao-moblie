@@ -35,7 +35,7 @@
       <div class="markdown-body" v-html="ArticleList.content"></div>
 
       <!-- 文章评论 -->
-      <Article-comment></Article-comment>
+      <Article-comment :articleId="articleId"></Article-comment>
       <!-- /文章评论 -->
     </div>
     <!-- /文章详情 -->
