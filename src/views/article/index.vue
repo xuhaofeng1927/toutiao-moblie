@@ -18,7 +18,7 @@
           <van-image class="avatar" round fit="cover" :src="ArticleList.aut_photo" />
           <div class="text">
             <p class="name">{{ArticleList.aut_name}}</p>
-            <p class="time">{{ArticleList.pubdate}}</p>
+            <p class="time">{{ArticleList.pubdate | Relativetime}}</p>
           </div>
         </div>
         <!-- 1，如果用户没有登录    2，如果当前文章作者不是当前登录用户 这两个条件下不能显示关注按钮-->
