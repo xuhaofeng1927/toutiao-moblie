@@ -49,3 +49,49 @@ export const cancelCollect = target => {
     url: `/app/v1_0/article/collections/${target}`
   })
 }
+
+/**
+ * 点赞文章
+ */
+export const addLike = target => {
+  return request({
+    method: 'POST',
+    url: '/app/v1_0/article/likings',
+    data: {
+      target
+    }
+  })
+}
+
+/**
+ * 取消点赞文章
+ */
+export const cancelLike = target => {
+  return request({
+    method: 'DELETE',
+    url: `/app/v1_0/article/likings/${target}`
+  })
+}
+
+/**
+ * 添加关注
+ */
+export const addFollow = target => {
+  return request({
+    method: 'POST',
+    url: '/app/v1_0/user/followings',
+    data: {
+      target
+    }
+  })
+}
+
+/**
+ * 取消关注
+ */
+export const cancelFollow = target => {
+  return request({
+    method: 'DELETE',
+    url: `/app/v1_0/user/followings/${target}`
+  })
+}

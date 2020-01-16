@@ -21,7 +21,16 @@
             <p class="time">{{ArticleList.pubdate}}</p>
           </div>
         </div>
-        <van-button class="follow-btn" type="info" size="small" round>+ 关注</van-button>
+        <!-- 1，如果用户没有登录    2，如果当前文章作者不是当前登录用户 这两个条件下不能显示关注按钮-->
+        <van-button
+          v-if="!user || ArticleList.aut_id !== user.id"
+          class="follow-btn"
+          :type="ArticleList.is_followed?'info':'default'"
+          size="small"
+          round
+          :loading ="isfollowed"
+          @click="onFollow(ArticleList.is_followed)"
+        >{{ ArticleList.is_followed ? '已关注' : '+ 关注' }}</van-button>
       </div>
       <div class="markdown-body" v-html="ArticleList.content"></div>
     </div>
@@ -39,8 +48,16 @@
     <div class="footer">
       <van-button class="write-btn" type="default" round size="small">写评论</van-button>
       <van-icon class="comment-icon" name="comment-o" info="9" />
-      <van-icon color="orange" :name="ArticleList.is_collected?'star':'star-o'"  @click="onCollect(ArticleList.is_collected)"/>
-      <van-icon color="#e5645f" name="good-job" />
+      <van-icon
+        color="orange"
+        :name="ArticleList.is_collected?'star':'star-o'"
+        @click="onCollect(ArticleList.is_collected)"
+      />
+      <van-icon
+        color="#e5645f"
+        :name="ArticleList.attitude===1?'good-job':'good-job-o'"
+        @click="onLike(ArticleList.attitude)"
+      />
       <van-icon class="share-icon" name="share" />
     </div>
     <!-- /底部区域 -->
@@ -48,7 +65,20 @@
 </template>
 
 <script>
-import { getArticleById, addCollect, cancelCollect } from '@/api/articles'
+import {
+  getArticleById,
+  addCollect,
+  cancelCollect,
+  addLike,
+  cancelLike,
+  addFollow,
+  cancelFollow
+} from '@/api/articles'
+// vuex 模块提供了一些辅助方法，专门用来让我们更方便的获取容器中的数据
+// mapState：映射获取 state 数据
+// mapMutation：映射获取 mutation 数据
+// maoAction：映射获取 action 数据
+import { mapState } from 'vuex'
 export default {
   name: 'ArticlePage',
   props: {
@@ -60,8 +90,14 @@ export default {
   data () {
     return {
       loading: true, // 控制加载状态的显示
-      ArticleList: {} // 文章详情列表
+      ArticleList: {}, // 文章详情列表
+      isfollowed: false // 关注按钮加载状态
     }
+  },
+  computed: {
+    // mapState 方法返回一个对象，对象中就是映射过来的容器中的数据成员
+    // ... 操作符就是把一个对象展开，混入当前对象中
+    ...mapState(['user'])
   },
   methods: {
     // 获取文章详情列表
@@ -75,6 +111,7 @@ export default {
       }
       this.loading = false //
     },
+    // 收藏OR取消收藏
     async onCollect (collected) {
       this.$toast.loading({
         duration: 0, // 持续展示 toast
@@ -91,6 +128,46 @@ export default {
         this.ArticleList.is_collected = true
         this.$toast.success('收藏成功')
       }
+    },
+    // 点赞OR取消点赞
+    async onLike (Like) {
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        message: '操作中...',
+        forbidClick: true // 是否禁止背景点击
+      })
+      if (Like === 1) {
+        // 如果是以点赞状态，要取消点赞
+        await cancelLike(this.articleId)
+        this.ArticleList.attitude = -1
+        this.$toast.success('取消点赞')
+      } else {
+        // 如果是未点赞，要点赞
+        await addLike(this.articleId)
+        this.ArticleList.attitude = 1
+        this.$toast.success('点赞成功')
+      }
+    },
+    // 关注OR未关注
+    async onFollow (Follow) {
+      this.isfollowed = true // 打开加载开关
+      const Autorid = this.ArticleList.aut_id // 作者id 不是文章id
+      try {
+        if (Follow) {
+          // 已关注
+          await cancelFollow(Autorid)
+        } else {
+          // 为关注
+          await addFollow(Autorid)
+        }
+        this.ArticleList.is_followed = !this.ArticleList.is_followed // 取反返回数据
+        this.$toast.success(Follow ? '取消关注' : '关注成功')
+      } catch (error) {
+        // 跳转到用户登录页面
+        this.$router.push('/login')
+      }
+
+      this.isfollowed = false // 数据加载完成后关闭加载状态
     }
   },
   created () {
