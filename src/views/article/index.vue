@@ -35,6 +35,9 @@
       <div class="markdown-body" v-html="ArticleList.content"></div>
 
       <!-- 文章评论 -->
+      <br/>
+      <hr/>
+      <div style="font-size:16px;">全部评论</div>
       <Article-comment :articleId="articleId"></Article-comment>
       <!-- /文章评论 -->
     </div>
@@ -50,7 +53,7 @@
 
     <!-- 底部区域 -->
     <div class="footer">
-      <van-button class="write-btn" type="default" round size="small">写评论</van-button>
+      <van-button class="write-btn" type="default" round size="small" @click="isPopupShow = true">写评论</van-button>
       <van-icon class="comment-icon" name="comment-o" info="9" />
       <van-icon
         color="orange"
@@ -65,6 +68,15 @@
       <van-icon class="share-icon" name="share" />
     </div>
     <!-- /底部区域 -->
+    <!-- 发表文章评论框弹出 -->
+    <van-popup
+  v-model="isPopupShow"
+  position="bottom"
+  :style="{ height: '18%' }"
+>
+<Post-comment></Post-comment>
+</van-popup>
+<!-- /发表文章评论框弹出 -->
   </div>
 </template>
 
@@ -95,7 +107,8 @@ export default {
     return {
       loading: true, // 控制加载状态的显示
       ArticleList: {}, // 文章详情列表
-      isfollowed: false // 关注按钮加载状态
+      isfollowed: false, // 关注按钮加载状态
+      isPopupShow: false // 评论弹出开关
     }
   },
   computed: {
