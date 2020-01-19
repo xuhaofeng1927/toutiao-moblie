@@ -38,7 +38,7 @@
       <br/>
       <hr/>
       <div style="font-size:16px;">全部评论</div>
-      <Article-comment :articleId="articleId"></Article-comment>
+      <Article-comment :articleId="articleId" ref="ArticleComment"></Article-comment>
       <!-- /文章评论 -->
     </div>
     <!-- /文章详情 -->
@@ -74,7 +74,7 @@
   position="bottom"
   :style="{ height: '18%' }"
 >
-<Post-comment></Post-comment>
+<Post-comment v-model="postMessage" @click-post="onPost"></Post-comment>
 </van-popup>
 <!-- /发表文章评论框弹出 -->
   </div>
@@ -95,6 +95,7 @@ import {
 // mapMutation：映射获取 mutation 数据
 // maoAction：映射获取 action 数据
 import { mapState } from 'vuex'
+import { addComments } from '@/api/comment'
 export default {
   name: 'ArticlePage',
   props: {
@@ -108,7 +109,8 @@ export default {
       loading: true, // 控制加载状态的显示
       ArticleList: {}, // 文章详情列表
       isfollowed: false, // 关注按钮加载状态
-      isPopupShow: false // 评论弹出开关
+      isPopupShow: false, // 评论弹出开关
+      postMessage: '' // 绑定输入框的数值
     }
   },
   computed: {
@@ -185,6 +187,30 @@ export default {
       }
 
       this.isfollowed = false // 数据加载完成后关闭加载状态
+    },
+    // 发表文章（对文章）评论
+    async onPost () {
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        message: '发布中...',
+        forbidClick: true // 是否禁止背景点击
+      })
+      try {
+        const { data } = await addComments({
+          target: this.articleId,
+          content: this.postMessage
+        })
+        // 清空数据
+        this.postMessage = ''
+        // 关闭弹层组件
+        this.isPopupShow = false
+        // 添加评论
+        this.$refs.ArticleComment.list.unshift(data.data.new_obj)
+        this.$toast.success('发布成功')
+      } catch (error) {
+        console.log(error)
+        this.toast.fail('发布失败')
+      }
     }
   },
   created () {
