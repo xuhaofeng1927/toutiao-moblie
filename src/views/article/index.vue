@@ -80,7 +80,7 @@
     </van-popup>
     <!-- /发表文章评论框弹出 -->
     <van-popup v-model="isReplyShow" position="bottom" :style="{ height: '90%' }">
-      评论回复
+      <Reply-comment :comment="currentComment" @onClickClose="isReplyShow=false"></Reply-comment>
     </van-popup>
   </div>
 </template>
