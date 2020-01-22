@@ -28,17 +28,17 @@
           :type="ArticleList.is_followed?'info':'default'"
           size="small"
           round
-          :loading ="isfollowed"
+          :loading="isfollowed"
           @click="onFollow(ArticleList.is_followed)"
         >{{ ArticleList.is_followed ? '已关注' : '+ 关注' }}</van-button>
       </div>
       <div class="markdown-body" v-html="ArticleList.content"></div>
 
       <!-- 文章评论 -->
-      <br/>
-      <hr/>
+      <br />
+      <hr />
       <div style="font-size:16px;">全部评论</div>
-      <Article-comment :articleId="articleId" ref="ArticleComment"></Article-comment>
+      <Article-comment :articleId="articleId" ref="ArticleComment" @click-reply="onReplyShow"></Article-comment>
       <!-- /文章评论 -->
     </div>
     <!-- /文章详情 -->
@@ -53,7 +53,13 @@
 
     <!-- 底部区域 -->
     <div class="footer">
-      <van-button class="write-btn" type="default" round size="small" @click="isPopupShow = true">写评论</van-button>
+      <van-button
+        class="write-btn"
+        type="default"
+        round
+        size="small"
+        @click="isPopupShow = true"
+      >写评论</van-button>
       <van-icon class="comment-icon" name="comment-o" info="9" />
       <van-icon
         color="orange"
@@ -69,14 +75,13 @@
     </div>
     <!-- /底部区域 -->
     <!-- 发表文章评论框弹出 -->
-    <van-popup
-  v-model="isPopupShow"
-  position="bottom"
-  :style="{ height: '18%' }"
->
-<Post-comment v-model="postMessage" @click-post="onPost"></Post-comment>
-</van-popup>
-<!-- /发表文章评论框弹出 -->
+    <van-popup v-model="isPopupShow" position="bottom" :style="{ height: '18%' }">
+      <Post-comment v-model="postMessage" @click-post="onPost"></Post-comment>
+    </van-popup>
+    <!-- /发表文章评论框弹出 -->
+    <van-popup v-model="isReplyShow" position="bottom" :style="{ height: '90%' }">
+      评论回复
+    </van-popup>
   </div>
 </template>
 
@@ -110,7 +115,9 @@ export default {
       ArticleList: {}, // 文章详情列表
       isfollowed: false, // 关注按钮加载状态
       isPopupShow: false, // 评论弹出开关
-      postMessage: '' // 绑定输入框的数值
+      postMessage: '', // 绑定输入框的数值
+      isReplyShow: false, // 回复弹出开关
+      currentComment: {} // 记录当前（一级）评论
     }
   },
   computed: {
@@ -211,6 +218,13 @@ export default {
         console.log(error)
         this.toast.fail('发布失败')
       }
+    },
+    // 点击回复弹出回复页面params当前评论的数据
+    onReplyShow (params) {
+      // 显示回复弹层
+      this.isReplyShow = true
+      // 将当前评论的数据记录起来
+      this.currentComment = params
     }
   },
   created () {

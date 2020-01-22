@@ -2,7 +2,10 @@
   <div class="article-comments">
     <!-- 评论列表 -->
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-      <Comment-detail v-for="(item,index) in list" :key="index" :comment="item"></Comment-detail>
+      <Comment-detail v-for="(item,index) in list" :key="index"
+        :comment="item"
+        @click-reply="$emit('click-reply',$event)"
+      ></Comment-detail>
     </van-list>
   </div>
 </template>
@@ -36,7 +39,6 @@ export default {
         limit: this.limit // 获取的评论数据个数，不传表示采用后端服务设定的默认每页数据量
       })
       const { results } = data.data // 获取对应的评论数
-      console.log(results)
 
       this.list.push(...results) // 加载在后面
       // 加载状态结束
