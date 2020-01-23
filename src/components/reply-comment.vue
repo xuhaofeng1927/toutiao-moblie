@@ -19,8 +19,9 @@
         @click="isPostShow = true"
       >写评论</van-button>
       <van-icon
-        color="#e5645f"
-        name="good-job"
+       :color="comment.is_liking ? '#e5645f' : ''"
+        :name="comment.is_liking ? 'good-job' : 'good-job-o'"
+        @click="onLike"
       />
     </div>
     <!-- /底部区域 -->
@@ -33,7 +34,7 @@
 </template>
 
 <script>
-import { getComments, addComments } from '@/api/comment'
+import { getComments, addComments, addCommentLike, cancelCommentLike } from '@/api/comment'
 export default {
   name: 'replyComment',
   props: {
@@ -81,6 +82,11 @@ export default {
     },
     // 发表文章（对一级回复）评论
     async onPost () {
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        message: '发布中...',
+        forbidClick: true // 是否禁止背景点击
+      })
       try {
         const { data } = await addComments({
           target: this.comment.com_id.toString(), // 评论的目标id（评论文章即为文章id，对评论进行回复则为评论id）
@@ -99,6 +105,27 @@ export default {
       } catch (error) {
         console.log(error)
         this.$toast.fail('发布失败')
+      }
+    },
+    // 回复点赞OR取消点赞
+    async onLike () {
+      try {
+        const commentId = this.comment.com_id.toString()
+        if (this.comment.is_liking) {
+        // 如果是点赞状态则取消点赞
+          await cancelCommentLike(commentId)
+          this.comment.like_count--
+        } else {
+        // 如果是取消状态则点赞
+          await addCommentLike(commentId)
+          this.comment.like_count++
+        }
+        // 更新视图
+        this.comment.is_liking = !this.comment.is_liking
+        this.$toast.success('操作成功')
+      } catch (error) {
+        console.log(error)
+        this.$toast.fail('操作失败')
       }
     }
   }
