@@ -26,19 +26,23 @@
     <!-- /底部区域 -->
       <!-- 发表文章评论框弹出 -->
     <van-popup v-model="isPostShow" position="bottom" :style="{ height: '18%' }">
-      <Post-comment v-model="postMessage"></Post-comment>
+      <Post-comment v-model="postMessage" @click-post="onPost"></Post-comment>
     </van-popup>
     <!-- /发表文章评论框弹出 -->
   </div>
 </template>
 
 <script>
-import { getComments } from '@/api/comment'
+import { getComments, addComments } from '@/api/comment'
 export default {
   name: 'replyComment',
   props: {
     comment: {
       type: Object,
+      required: true
+    },
+    articleId: {
+      type: [Object, Number, String],
       required: true
     }
   },
@@ -76,8 +80,26 @@ export default {
       }
     },
     // 发表文章（对一级回复）评论
-    onPost () {
-
+    async onPost () {
+      try {
+        const { data } = await addComments({
+          target: this.comment.com_id.toString(), // 评论的目标id（评论文章即为文章id，对评论进行回复则为评论id）
+          content: this.postMessage, // 评论内容
+          art_id: this.articleId // 文章id，对评论内容发表回复时，需要传递此参数，表明所属文章id。对文章进行评论，不要传此参数。
+        })
+        // 清空评论内容
+        this.postMessage = ''
+        // 关闭弹层
+        this.isPostShow = false
+        // 将数据添加到列表顶部
+        this.list.unshift(data.data.new_obj)
+        // 更新回复的总数量
+        this.comment.reply_count++
+        this.$toast.success('发布成功')
+      } catch (error) {
+        console.log(error)
+        this.$toast.fail('发布失败')
+      }
     }
   }
 }
