@@ -1,6 +1,6 @@
 <template>
   <div class="reply-comment">
-    <van-nav-bar title="0条回复" @click-left="$emit('onClickClose')">
+    <van-nav-bar :title="`${comment.reply_count}条回复`" @click-left="$emit('onClickClose')">
       <van-icon name="cross" slot="left" />
     </van-nav-bar>
     <Comment-detail :comment="comment"></Comment-detail>
@@ -8,6 +8,27 @@
     <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
       <Comment-detail :comment="comment" v-for="(comment,index) in list" :key="index"></Comment-detail>
     </van-list>
+
+    <!-- 底部区域 -->
+    <div class="footer">
+      <van-button
+        class="write-btn"
+        type="default"
+        round
+        size="small"
+        @click="isPostShow = true"
+      >写评论</van-button>
+      <van-icon
+        color="#e5645f"
+        name="good-job"
+      />
+    </div>
+    <!-- /底部区域 -->
+      <!-- 发表文章评论框弹出 -->
+    <van-popup v-model="isPostShow" position="bottom" :style="{ height: '18%' }">
+      <Post-comment v-model="postMessage"></Post-comment>
+    </van-popup>
+    <!-- /发表文章评论框弹出 -->
   </div>
 </template>
 
@@ -27,7 +48,9 @@ export default {
       loading: false,
       finished: false,
       offset: null,
-      limit: 20
+      limit: 20,
+      isPostShow: false, // 回复评论弹层
+      postMessage: ''
     }
   },
   methods: {
@@ -51,6 +74,10 @@ export default {
       } else {
         this.finished = true
       }
+    },
+    // 发表文章（对一级回复）评论
+    onPost () {
+
     }
   }
 }
@@ -63,4 +90,23 @@ export default {
     color: rgb(0, 153, 255);
   }
 }
+ .footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 44px;
+    border-top: 1px solid #d8d8d8;
+    background-color: #fff;
+    .write-btn {
+      width: 160px;
+    }
+    .van-icon {
+      font-size: 20px;
+    }
+  }
 </style>

@@ -79,9 +79,11 @@
       <Post-comment v-model="postMessage" @click-post="onPost"></Post-comment>
     </van-popup>
     <!-- /发表文章评论框弹出 -->
+    <!-- 回复列表弹出框 -->
     <van-popup v-model="isReplyShow" position="bottom" :style="{ height: '90%' }">
       <Reply-comment :comment="currentComment" @onClickClose="isReplyShow=false"></Reply-comment>
     </van-popup>
+     <!-- /回复列表弹出框 -->
   </div>
 </template>
 
