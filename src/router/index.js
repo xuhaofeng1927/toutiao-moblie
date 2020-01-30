@@ -11,6 +11,11 @@ const routes = [
     component: () => import ('@/views/login') // 按需加载
   },
   {
+    path: '/user/profile',
+    name: 'userProfile',
+    component: () => import ('@/views/user-profile') // 按需加载
+  },
+  {
     path: '/user/:userId',
     name: 'user',
     component: () => import ('@/views/user') // 按需加载
