@@ -10,22 +10,39 @@
           width="30"
           height="30"
           fit="cover"
-          src=""
+          :src="user.photo"
         />
       </van-cell>
-      <van-cell title="昵称" value="abc" is-link />
-      <van-cell title="性别" value="男" is-link />
-      <van-cell title="生日" value="2019-9-27" is-link />
+      <van-cell title="昵称" :value="user.name" is-link />
+      <van-cell title="性别" :value="user.gender?'女':'男'" is-link />
+      <van-cell title="生日" :value="user.birthday" is-link />
     </van-cell-group>
   </div>
 </template>
 
 <script>
+import { getPersonUserxInfo } from '@/api/user'
 export default {
+  data () {
+    return {
+      user: {} // 接收用户个人信息
+    }
+  },
   methods: {
     onback () {
       this.$router.go(-1)
+    },
+    async getPersonUserxInfo () {
+      try {
+        const { data } = await getPersonUserxInfo()
+        this.user = data.data
+      } catch (error) {
+        console.log(error)
+      }
     }
+  },
+  created () {
+    this.getPersonUserxInfo()
   }
 }
 </script>

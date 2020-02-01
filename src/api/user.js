@@ -31,3 +31,11 @@ export const getAutherUserInfo = (id) => {
     method: 'get'// 请求方式
   })
 }
+
+// 获取个人用户信息
+export const getPersonUserxInfo = () => {
+  return request({
+    url: `/app/v1_0/user/profile`,
+    method: 'get'// 请求方式
+  })
+}
