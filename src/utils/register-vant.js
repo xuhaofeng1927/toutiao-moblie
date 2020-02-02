@@ -18,7 +18,8 @@ import {
   PullRefresh,
   Popup,
   Search,
-  Loading
+  Loading,
+  ImagePreview
 } from 'vant' // 在引入Vant相关的组件模块
 
 // 全局注册相关组件模块 （链式调用）
@@ -39,3 +40,4 @@ Vue.use(Button) // 注册button按钮
   .use(Popup) // 注册Popup弹出框
   .use(Search) // 注册Search搜索框
   .use(Loading) // 注册Loading加载框
+  .use(ImagePreview) // 注册图片预览

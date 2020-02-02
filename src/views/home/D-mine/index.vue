@@ -100,7 +100,7 @@ export default {
     },
     // 退出登录
     async outlogin () {
-      await this.$dialog({
+      await this.$dialog.confirm({
         title: '退出提示',
         message: '您确定要退出登录吗' })
       this.$store.commit('setuser', null)
