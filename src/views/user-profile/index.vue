@@ -11,7 +11,7 @@
       <van-cell title="昵称" :value="user.name" @click="onNameAlter" is-link />
       <van-cell title="介绍" value="内容" is-link />
       <van-cell title="性别" :value="user.gender?'女':'男'" is-link @click="isSexShow=true" />
-      <van-cell title="生日" :value="user.birthday" is-link />
+      <van-cell title="生日" :value="user.birthday" @click="isEditBirthdayShow=true" is-link />
     </van-cell-group>
     <!-- 头像预览 -->
     <van-image-preview v-model="isHeadShow" :images="images" @close="$refs.file.value = ''">
@@ -54,6 +54,23 @@
         @select="onGenderSelect"
       />
     <!-- /修改性别 -->
+    <!-- 修改生日日期 -->
+    <van-popup v-model="isEditBirthdayShow" position="bottom">
+      <!--
+          v-model="currentDate" 默认显示时间和同步用户选择的时间
+          :min-date="minDate" 最小可选日期
+          max-date  最大可选日期
+        -->
+      <van-datetime-picker
+        :value="currentDate"
+        type="date"
+        :min-date="minDate"
+        :max-date="maxDate"
+        @cancel="isEditBirthdayShow = false"
+        @confirm="onUpdateBirthday"
+      />
+    </van-popup>
+    <!-- /修改生日日期 -->
   </div>
 </template>
 
@@ -63,7 +80,7 @@ import {
   updateUserPhoto,
   updateUserProfile
 } from '@/api/user'
-// import { ImagePreview } from 'vant'
+import moment from 'moment'
 export default {
   data () {
     return {
@@ -76,7 +93,11 @@ export default {
       actions: [
         { name: '男', value: 0 },
         { name: '女', value: 1 }
-      ]
+      ], // 选项对应的所有对象
+      isEditBirthdayShow: false,
+      minDate: new Date(1970, 0, 1), // 最小可选日期
+      maxDate: new Date() // 最大可选日期
+      // currentDate: new Date()
     }
   },
   computed: {
@@ -85,6 +106,10 @@ export default {
     // 因为多次访问到了该成员，所以我可以使用计算属性封装简化对成员的访问
     file () {
       return this.$refs['file']
+    },
+    currentDate () {
+      // 把字符串格式的日期转换为 JavaScript 日期对象，设置给 Vant 日期选择器
+      return new Date(this.user.birthday)
     }
   },
   methods: {
@@ -153,15 +178,25 @@ export default {
       }
     },
     // 修改昵称
-    onClickNameRight () {
-      this.onupdateUserProfile('name', this.nameMessage)
+    async onClickNameRight () {
+      await this.onupdateUserProfile('name', this.nameMessage)
       this.user.name = this.nameMessage
       this.isNameShow = false
     },
-    onGenderSelect (item) {
-      this.onupdateUserProfile('gender', item.value)
-      this.user.gender = item.value
+    // 修改性别
+    async onGenderSelect (item) {
+      await this.onupdateUserProfile('gender', item.value)
+      this.user.gender = item.value // item: 选项对应的对象, index: 选择对应的索引
       this.isSexShow = false
+    },
+    async onUpdateBirthday (value) {
+      // value: 当前选中的时间
+      const birthdayDate = moment(value).format('YYYY-MM-DD')
+      await this.onupdateUserProfile('birthday', birthdayDate)
+      // 视图更新
+      this.user.birthday = birthdayDate
+      // 关闭弹窗
+      this.isEditBirthdayShow = false
     }
   },
   created () {
