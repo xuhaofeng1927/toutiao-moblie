@@ -40,20 +40,20 @@ export const getPersonUserxInfo = () => {
   })
 }
 
-// // 获取个人用户信息
-// export const updateUserPhoto = (data) => {
-//   return request({
-//     url: `/app/v1_0/user/photo`,
-//     method: 'PATCH', // 请求方式
-//     data
-//   })
-// }
-
 // 获取用户资料
 export const updateUserPhoto = data => {
   return request({
     method: 'PATCH',
     url: '/app/v1_0/user/photo',
+    data
+  })
+}
+
+// 更新用户资料
+export const updateUserProfile = data => {
+  return request({
+    method: 'PATCH',
+    url: '/app/v1_0/user/profile',
     data
   })
 }

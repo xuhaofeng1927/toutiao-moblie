@@ -1,14 +1,14 @@
 <template>
   <div class="user-info">
     <!-- 导航信息 -->
-    <van-nav-bar title="用户信息" left-arrow @click-left="onback" right-text="保存" />
+    <van-nav-bar title="用户信息" left-arrow @click-left="$router.go(-1)" right-text="保存" />
     <!-- /导航信息 -->
     <van-cell-group>
       <van-cell title="头像" @click="onSelectFile">
         <van-image round width="30" height="30" fit="cover" :src="user.photo" />
         <input type="file" hidden ref="file" @change="onFileChange" />
       </van-cell>
-      <van-cell title="昵称" :value="user.name" is-link />
+      <van-cell title="昵称" :value="user.name" @click="onNameAlter" is-link />
       <van-cell title="介绍" value="内容" is-link />
       <van-cell title="性别" :value="user.gender?'女':'男'" is-link />
       <van-cell title="生日" :value="user.birthday" is-link />
@@ -24,18 +24,41 @@
       />
     </van-image-preview>
     <!-- /头像预览 -->
+    <!-- 修改昵称 -->
+    <van-popup v-model="isNameShow" position="bottom">
+      <van-nav-bar
+        title="修改昵称"
+        left-text="返回"
+        right-text="确认"
+        @click-left="isNameShow=false"
+        @click-right="onClickNameRight"
+        show-word-limit
+      />
+      <van-field
+        v-model="nameMessage"
+        rows="2"
+        autosize
+        type="textarea"
+        maxlength="50"
+        placeholder="请输入留言"
+        show-word-limit
+      />
+    </van-popup>
+    <!-- /修改昵称 -->
   </div>
 </template>
 
 <script>
-import { getPersonUserxInfo, updateUserPhoto } from '@/api/user'
+import { getPersonUserxInfo, updateUserPhoto, updateUserProfile } from '@/api/user'
 // import { ImagePreview } from 'vant'
 export default {
   data () {
     return {
       user: {}, // 接收用户个人信息
-      isHeadShow: false,
-      images: [] // 预览图片列表
+      isHeadShow: false, // 头像预览显示开关
+      images: [], // 预览图片列表
+      isNameShow: false, // 昵称修改显示开关
+      nameMessage: '' // 昵称修改内容
     }
   },
   computed: {
@@ -47,9 +70,6 @@ export default {
     }
   },
   methods: {
-    onback () {
-      this.$router.go(-1)
-    },
     async getPersonUserxInfo () {
       try {
         const { data } = await getPersonUserxInfo()
@@ -92,6 +112,33 @@ export default {
         console.log(error)
         this.$toast.fail('上传失败')
       }
+    },
+    onNameAlter () {
+      this.isNameShow = true
+      this.nameMessage = this.user.name
+    },
+    // 更新用户信息(封装整体公共方法)
+    async onupdateUserProfile (filed, value) {
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        message: '更新中...',
+        forbidClick: true // 是否禁止背景点击
+      })
+      try {
+        await updateUserProfile({
+          [filed]: value // 注意属性名使用中括号包裹，否则会当做字符串来使用而不是变量
+        })
+        this.$toast.success('更新成功')
+      } catch (error) {
+        console.log(error)
+        this.$toast.fail('更新失败')
+      }
+    },
+    // 修改昵称
+    onClickNameRight () {
+      this.onupdateUserProfile('name', this.nameMessage)
+      this.user.name = this.nameMessage
+      this.isNameShow = false
     }
   },
   created () {
@@ -101,9 +148,23 @@ export default {
 </script>
 
 <style scoped lang="less">
-.van-nav-bar__text {
-  color: white;
+.van-popup {
+  .van-nav-bar {
+  background-color: white;
+  .van-nav-bar__title {
+    color: black;
+  }
+  .van-nav-bar__left {
+    .van-icon-arrow-left {
+      color: black;
+    }
+  }
 }
+.van-nav-bar__text {
+  color: black;
+}
+}
+
 /deep/ .van-image-preview__cover {
   top: unset;
   left: 0;
