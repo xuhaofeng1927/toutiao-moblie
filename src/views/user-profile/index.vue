@@ -10,7 +10,7 @@
       </van-cell>
       <van-cell title="昵称" :value="user.name" @click="onNameAlter" is-link />
       <van-cell title="介绍" value="内容" is-link />
-      <van-cell title="性别" :value="user.gender?'女':'男'" is-link />
+      <van-cell title="性别" :value="user.gender?'女':'男'" is-link @click="isSexShow=true" />
       <van-cell title="生日" :value="user.birthday" is-link />
     </van-cell-group>
     <!-- 头像预览 -->
@@ -45,11 +45,24 @@
       />
     </van-popup>
     <!-- /修改昵称 -->
+    <!-- 修改性别 -->
+      <van-action-sheet
+        v-model="isSexShow"
+        :actions="actions"
+        cancel-text="取消"
+        @cancel="isSexShow=false"
+        @select="onGenderSelect"
+      />
+    <!-- /修改性别 -->
   </div>
 </template>
 
 <script>
-import { getPersonUserxInfo, updateUserPhoto, updateUserProfile } from '@/api/user'
+import {
+  getPersonUserxInfo,
+  updateUserPhoto,
+  updateUserProfile
+} from '@/api/user'
 // import { ImagePreview } from 'vant'
 export default {
   data () {
@@ -58,7 +71,12 @@ export default {
       isHeadShow: false, // 头像预览显示开关
       images: [], // 预览图片列表
       isNameShow: false, // 昵称修改显示开关
-      nameMessage: '' // 昵称修改内容
+      nameMessage: '', // 昵称修改内容
+      isSexShow: false, // 性别修改显示开关
+      actions: [
+        { name: '男', value: 0 },
+        { name: '女', value: 1 }
+      ]
     }
   },
   computed: {
@@ -139,6 +157,11 @@ export default {
       this.onupdateUserProfile('name', this.nameMessage)
       this.user.name = this.nameMessage
       this.isNameShow = false
+    },
+    onGenderSelect (item) {
+      this.onupdateUserProfile('gender', item.value)
+      this.user.gender = item.value
+      this.isSexShow = false
     }
   },
   created () {
@@ -150,19 +173,19 @@ export default {
 <style scoped lang="less">
 .van-popup {
   .van-nav-bar {
-  background-color: white;
-  .van-nav-bar__title {
-    color: black;
-  }
-  .van-nav-bar__left {
-    .van-icon-arrow-left {
+    background-color: white;
+    .van-nav-bar__title {
       color: black;
     }
+    .van-nav-bar__left {
+      .van-icon-arrow-left {
+        color: black;
+      }
+    }
   }
-}
-.van-nav-bar__text {
-  color: black;
-}
+  .van-nav-bar__text {
+    color: black;
+  }
 }
 
 /deep/ .van-image-preview__cover {
