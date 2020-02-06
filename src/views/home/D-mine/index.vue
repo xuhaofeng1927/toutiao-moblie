@@ -44,10 +44,10 @@
 
     <!-- 其它 -->
     <van-grid clickable :column-num="3">
-      <van-grid-item text="我的收藏" to="/my-article/collect">
+      <van-grid-item text="我的收藏" to="/my-articles/collect">
         <van-icon slot="icon" name="star-o" color="#eb5253" />
       </van-grid-item>
-      <van-grid-item text="浏览历史" to="/my-article/history">
+      <van-grid-item text="浏览历史" to="/my-articles/history">
         <van-icon slot="icon" name="browsing-history-o" color="#ffa023" />
       </van-grid-item>
       <van-grid-item text="作品" to="/my-articles">

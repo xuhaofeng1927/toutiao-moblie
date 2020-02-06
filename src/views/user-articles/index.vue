@@ -1,7 +1,7 @@
 <template>
   <div class="user-articles">
     <!-- 导航栏 -->
-    <van-nav-bar title="我的收藏/历史/作品" left-arrow @click-left="$router.back()" />
+    <van-nav-bar title="我的收藏/历史/作品" left-arrow @click-left="$router.back()" fixed/>
     <!-- /导航栏 -->
 
     <van-tabs v-model="active" swipeable>
@@ -25,10 +25,17 @@ import myHistory from './components/my-history'
 export default {
   name: 'UserArticles',
   data () {
+    let active = ['collect', 'history'].indexOf(this.type)
+    if (active === -1) {
+      active = 2
+    }
     return {
-      active: 2
+      active // 控制激活的标签选项
+
     }
   },
+  // 接收文章状态类型
+  props: ['type'],
   components: {
     myProduction,
     myCollect,
@@ -38,4 +45,16 @@ export default {
 }
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.user-articles {
+  padding-top: 90px;
+  padding-bottom: 50px;
+  /deep/ .van-tabs__wrap {
+    position: fixed;
+    top: 46px;
+    left: 0;
+    right: 0;
+    z-index: 1;
+  }
+}
+</style>

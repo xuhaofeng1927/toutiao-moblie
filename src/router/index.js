@@ -34,20 +34,21 @@ const routes = [
   },
 
   { // 我的作品
-    path: '/my-articles',
-    name: 'my-articles',
-    component: () => import('@/views/user-articles')
+    path: '/my-articles/:type?', // collect,htstory
+    name: 'my-article',
+    component: () => import('@/views/user-articles'),
+    props: true
   },
-  { // 我的收藏
-    path: '/my-article/collect',
-    name: 'my-article-collect',
-    component: () => import('@/views/user-articles')
-  },
-  { // 我的历史
-    path: '/my-article/history',
-    name: 'my-article-history',
-    component: () => import('@/views/user-articles')
-  },
+  // { // 我的收藏
+  //   path: '/my-article/collect',
+  //   name: 'my-article-collect',
+  //   component: () => import('@/views/user-articles')
+  // },
+  // { // 我的历史
+  //   path: '/my-article/history',
+  //   name: 'my-article-history',
+  //   component: () => import('@/views/user-articles')
+  // },
   {
     path: '/', // 默认切换到首页
     component: () => import ('@/views/home'), // 按需加载
