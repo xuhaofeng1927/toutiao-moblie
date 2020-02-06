@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { getCurrentUserArticles } from '@/api/articles'
+import { getHistoryArticles } from '@/api/articles'
 export default {
   data () {
     return {
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     async onLoad () {
-      const { data } = await getCurrentUserArticles({
+      const { data } = await getHistoryArticles({
         page: this.page, // 当前页码
         perPage: this.perPage // 每页大小
       })

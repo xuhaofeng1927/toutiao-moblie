@@ -5,8 +5,12 @@
     <!-- /导航栏 -->
 
     <van-tabs v-model="active" swipeable>
-      <van-tab title="我的收藏">内容 1</van-tab>
-      <van-tab title="我的历史">内容 2</van-tab>
+      <van-tab title="我的收藏">
+          <myCollect/>
+      </van-tab>
+      <van-tab title="我的历史">
+          <my-history/>
+      </van-tab>
       <van-tab title="我的作品">
         <my-production/>
       </van-tab>
@@ -16,6 +20,8 @@
 
 <script>
 import myProduction from './components/my-production'
+import myCollect from './components/my-collect'
+import myHistory from './components/my-history'
 export default {
   name: 'UserArticles',
   data () {
@@ -24,7 +30,9 @@ export default {
     }
   },
   components: {
-    myProduction
+    myProduction,
+    myCollect,
+    myHistory
   },
   methods: {}
 }

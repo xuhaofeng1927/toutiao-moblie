@@ -45,7 +45,7 @@ const routes = [
   },
   { // 我的历史
     path: '/my-article/history',
-    name: 'my-article-collect',
+    name: 'my-article-history',
     component: () => import('@/views/user-articles')
   },
   {
