@@ -32,6 +32,22 @@ const routes = [
     // 将路由动态参数映射到组件的 props 中，更推荐这种做法
     props: true
   },
+
+  { // 我的作品
+    path: '/my-articles',
+    name: 'my-articles',
+    component: () => import('@/views/user-articles')
+  },
+  { // 我的收藏
+    path: '/my-article/collect',
+    name: 'my-article-collect',
+    component: () => import('@/views/user-articles')
+  },
+  { // 我的历史
+    path: '/my-article/history',
+    name: 'my-article-collect',
+    component: () => import('@/views/user-articles')
+  },
   {
     path: '/', // 默认切换到首页
     component: () => import ('@/views/home'), // 按需加载
