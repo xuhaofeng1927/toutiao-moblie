@@ -10,6 +10,13 @@ const routes = [
     name: 'login',
     component: () => import ('@/views/login') // 按需加载
   },
+  // 小智机器人
+  {
+    path: '/user/chat',
+    name: 'user-chat',
+    component: () => import('@/views/user-chat')// 按需加载
+  },
+  // 路由的匹配规则是从上到下的，越靠上面的优先级越高
   {
     path: '/user/profile',
     name: 'userProfile',
