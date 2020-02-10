@@ -6,7 +6,11 @@
 
     <!-- 消息列表 -->
     <div class="message-list" ref="message-list">
-      <div class="message-item" :class="{ reverse: item % 3 === 0 }" v-for="item in 20" :key="item">
+      <div class="message-item"
+        :class="{ reverse: item.isMe }"
+        v-for="(item,index) in messagelist"
+        :key="index"
+      >
         <van-image
           class="avatar"
           slot="icon"
@@ -16,7 +20,7 @@
           src="https://img.yzcdn.cn/vant/cat.jpeg"
         />
         <div class="title">
-          <span>{{ `hello${item}` }}</span>
+          <span>{{ item.msg }}</span>
         </div>
       </div>
     </div>
@@ -39,7 +43,8 @@ export default {
   data () {
     return {
       message: '',
-      socket: null // WebSocket 通信对象
+      socket: null, // WebSocket 通信对象
+      messagelist: [] // 接收消息的数组
     }
   },
   methods: {
@@ -51,11 +56,17 @@ export default {
       if (!message.length) {
         return // 消息如果为空则返回回去
       }
-      // 发送消息
-      this.socket.emit('message', {
+      // 封装要发送的内容
+      const data = {
+        isMe: true, // 我发送的标识
         msg: message, // 聊天输入内容
         timestamp: Date.now() // 聊天发送时间戳
-      })
+
+      }
+      // 发送消息
+      this.socket.emit('message', data)
+      // 将消息存储起来
+      this.messagelist.push(data)
       // 消息清空
       this.message = ''
     }
@@ -76,7 +87,9 @@ export default {
     // 接收消息
     // socket.on('消息类型', data => console.log(data))
     socket.on('message', result => {
-      console.log('message接收到消息为 ', result)
+      // console.log('message接收到消息为 ', result)
+      // 将接收到的消息存储起来
+      this.messagelist.push(result)
     })
   }
 }
@@ -84,6 +97,7 @@ export default {
 
 <style scoped lang="less">
 .chat-container {
+  font-size: 16px;
   position: absolute;
   width: 100%;
   height: 100%;
