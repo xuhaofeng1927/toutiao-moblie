@@ -38,16 +38,33 @@
 
 <script>
 import io from 'socket.io-client'
+import { getItem, setItem } from '@/utils/storage'
 export default {
   name: 'UserChat',
   data () {
     return {
       message: '',
       socket: null, // WebSocket 通信对象
-      messagelist: [] // 接收消息的数组
+      messagelist: getItem('chat-messages') || [] // 接收消息的数组
+    }
+  },
+  watch: {
+    // 监听消息数据的变化进行本地存储
+    messagelist (newvalue) {
+      setItem('chat-messages', newvalue)
+      // 让消息列表滚动到底部
+      // 这里数据影响试图不是立即的
+      this.$nextTick(() => {
+        this.toBottom()
+      })
     }
   },
   methods: {
+    // 滚动到底部
+    toBottom () {
+      const listContainer = this.$refs['message-list']
+      listContainer.scrollTop = listContainer.scrollHeight
+    },
     onSend () {
       // console.log('发送事件')
       // 获取消息内容
@@ -90,6 +107,7 @@ export default {
       // console.log('message接收到消息为 ', result)
       // 将接收到的消息存储起来
       this.messagelist.push(result)
+      // 将数据持久化
     })
   }
 }
