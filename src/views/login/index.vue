@@ -13,10 +13,10 @@
          v-slot="{ errors }" 获取校验失败的错误提示消息
       -->
       <ValidationObserver ref="myform">
-        <ValidationProvider name="手机号" rules="required|mobile" immediate v-slot="{ errors }">
+        <ValidationProvider name="手机号" rules="required|mobile" immediate >
           <van-field placeholder="请输入用户名/手机号/邮箱" left-icon="user-o" v-model="user.mobile"></van-field>
         </ValidationProvider>
-        <ValidationProvider name="验证码" rules="required|code" immediate v-slot="{ errors }">
+        <ValidationProvider name="验证码" rules="required|code" immediate >
           <van-field placeholder="请输入验证码" v-model="user.code">
             <van-icon slot="left-icon" class-prefix="icont" name="mima" />
             <van-button
@@ -86,7 +86,6 @@ export default {
         try {
         // 1,获取数据
           const user = this.user
-          console.log(user)
           // 2，请求参数
           let result = await getUsersLogin(user)
           // 3，返回数据
@@ -95,7 +94,11 @@ export default {
           // 4，Vuex 存储Token 提交监听事件  传递数据 存储token数据
           this.$store.commit('setuser', result.data.data)
           this.$toast.success('登录成功')
-          this.$router.push('/')
+          // 如果有 redirect 则跳转到来源页，没有就跳转到首页
+          const redirect = this.$route.query.redirect || '/'
+          this.$router.push(redirect)
+          // const redirect = this.$route.query.redirect || '/'
+          // this.$router.push(redirect)
         } catch (error) {
           console.log('失败', error)
           this.$toast.fail('用户名或密码错误')

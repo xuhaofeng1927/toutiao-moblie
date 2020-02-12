@@ -98,3 +98,23 @@ computed: {
 </van-button>
 ```
 
+#### 路由传参（知识点）
+
+``` JS
+router.push({
+    name: 'login',
+    query: {
+      redirect: router.currentRoute.fullPath
+    }
+  })
+```
+
+- params参数（严格）
+    - 配置路由路径规则 例如： /login/:abc
+    - 在组件中获取参数 例如：this.$route.params.abc 或者通过 props
+* query 参数
+    * 不需要配置路由规则 例如：/login/?a=b&foo=b&n=10
+    * 在组件中获取参数 例如：this.&route.query.xxx
+* 使用建议
+    * 把非必须参数配置为query参数
+    * 把必须参数配置为params参数
