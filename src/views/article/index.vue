@@ -60,7 +60,7 @@
         size="small"
         @click="isPopupShow = true"
       >写评论</van-button>
-      <van-icon class="comment-icon" name="comment-o" info="9" />
+      <van-icon class="comment-icon" name="comment-o"/>
       <van-icon
         color="orange"
         :name="ArticleList.is_collected?'star':'star-o'"

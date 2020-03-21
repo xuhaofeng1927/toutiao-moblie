@@ -23,12 +23,14 @@
 
 <script>
 import { getCollectArticles } from '@/api/articles'
+import router from '@/router'
 export default {
   data () {
     return {
       list: [],
       loading: false,
       finished: false,
+      router,
       page: 1, // 当前页码
       perPage: 10 // 每页大小
     }

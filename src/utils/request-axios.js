@@ -45,7 +45,7 @@ request.interceptors.response.use(
   },
   // 响应失败 处理函数
   async function (error) {
-    if (error.response.status === 401 || error.response) {
+    if (error.response.status === 401 && error.response) {
       console.log('重新发送请求')
       // 检验是否有refresh_token
       const { user } = store.state
@@ -68,7 +68,6 @@ request.interceptors.response.use(
             Authorization: `Bearer ${user.refresh_token}`
           }
         })
-        console.log(data)
         // 3. 如果刷新 token 成功了，则把新的 token 更新到容器中
         store.commit('setuser', {
           ...user, // { id, token, refresh_token }

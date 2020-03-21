@@ -5,12 +5,12 @@
         v-for="(item,index) in list"
         :key="index"
         :title="item.title"
-        @click="router.push({
+        @click=" router.push({
         name: 'article',
         params: {
           articleId: item.art_id.toString()
         }
-    })"
+      })"
       />
     </van-list>
   </div>
@@ -18,12 +18,14 @@
 
 <script>
 import { getCurrentUserArticles } from '@/api/articles'
+import router from '@/router'
 export default {
   data () {
     return {
       list: [],
       loading: false,
       finished: false,
+      router,
       page: 1, // 当前页码
       perPage: 10 // 每页大小
     }
