@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d22ccbf"],{f582:function(e,a,n){"use strict";n.r(a);var t=function(){var e=this,a=e.$createElement,n=e._self._c||a;return n("div",{staticClass:"video-container"},[n("van-nav-bar",{attrs:{title:"视频"}})],1)},c=[],i={name:"VideoPage"},s=i,r=n("2877"),o=Object(r["a"])(s,t,c,!1,null,"d2a0da9e",null);a["default"]=o.exports}}]);
+//# sourceMappingURL=chunk-2d22ccbf.11c96ac3.js.map
